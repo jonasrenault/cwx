@@ -1,0 +1,12 @@
+svg {
+  border: 1px solid black;
+}
+svg .u-area.active {
+  opacity: 50%;
+}
+
+svg .u-border {
+  stroke: black;
+  stroke-width: 2px;
+  opacity: 50%;
+}

@@ -1,83 +1,58 @@
-import { Container, Box, Typography, Link } from '@mui/material'
+import { Container, Box, Typography, Grid, Card, CardHeader, CardContent } from '@mui/material'
+import { useLoaderData, redirect } from 'react-router-dom'
+import { Wall } from '../models/wall'
+import WallViewer from '../components/WallViewer'
+import wallService from '../services/wall.service'
+
+export async function loader() {
+  try {
+    const walls = await wallService.getWalls()
+    return { walls }
+  } catch {
+    return redirect('/')
+  }
+}
 
 export default function Home() {
+  const { walls } = useLoaderData<Array<Wall>>()
   return (
-    <Box
-      sx={{
-        bgcolor: 'background.paper',
-        pt: 8,
-        pb: 6,
-      }}
-    >
-      <Container maxWidth='sm'>
-        <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
-          <Link href='https://fastapi.tiangolo.com/'>
-            <Box
-              component='img'
-              sx={{
-                width: 250,
-              }}
-              alt='FastAPI'
-              src='fastapi.png'
-            />
-          </Link>
-
-          <Typography variant='h3' sx={{ mr: 2 }} color='text.secondary'>
-            +
-          </Typography>
-
-          <Link href='https://reactjs.org/' underline='none'>
-            <Box sx={{ display: 'flex' }}>
-              <Box
-                component='img'
-                sx={{
-                  width: 40,
-                  mr: 1,
-                }}
-                alt='ReactIcon'
-                src='react.svg'
-              />
-              <Typography variant='h3' align='center' color='rgb(97, 218, 251)'>
-                React
-              </Typography>
-            </Box>
-          </Link>
-
-          <Typography variant='h3' sx={{ mx: 2 }} color='text.secondary'>
-            +
-          </Typography>
-
-          <Link href='https://www.mongodb.com/'>
-            <Box
-              component='img'
-              sx={{
-                // height: 233,
-                width: 250,
-              }}
-              alt='MongoDB'
-              src='mongodb.png'
-            />
-          </Link>
-
-          <Typography variant='h3' sx={{ mr: 2, ml: 1 }} color='text.secondary'>
-            +
-          </Typography>
-
-          <Link href='https://www.docker.com/'>
-            <Box
-              component='img'
-              sx={{
-                // height: 233,
-                width: 250,
-              }}
-              alt='Docker'
-              src='docker.png'
-            />
-          </Link>
-        </Box>
-        <Typography variant='h3' align='center' color='text.secondary' sx={{ mt: 5 }}>
-          = FARMD
+    <Box>
+      {/* Hero unit */}
+      <Container disableGutters maxWidth='sm' component='main' sx={{ pt: 8, pb: 6 }}>
+        <Typography component='h1' variant='h2' align='center' color='text.primary' gutterBottom>
+          Paris Wall eXplorer
         </Typography>
+      </Container>
+
+      {/* End hero unit */}
+      <Container maxWidth='md' component='main'>
+        <Grid container spacing={5} alignItems='flex-end'>
+          {walls.map((wall) => (
+            // Enterprise card is full width at sm breakpoint
+            <Grid item key={wall.key} xs={12} sm={6} md={6}>
+              <Card>
+                <CardHeader
+                  title={wall.name}
+                  subheader={wall.city}
+                  titleTypographyProps={{ align: 'center' }}
+                  subheaderTypographyProps={{
+                    align: 'center',
+                  }}
+                />
+                <CardContent>
+                  <Box>
+                    <WallViewer wall={wall} />
+                  </Box>
+                </CardContent>
+                {/* <CardActions>
+                  <Button fullWidth variant={tier.buttonVariant as 'outlined' | 'contained'}>
+                    {tier.buttonText}
+                  </Button>
+                </CardActions> */}
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </Container>
     </Box>
   )

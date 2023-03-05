@@ -6,6 +6,7 @@ from pymongo import errors
 from pydantic.networks import EmailStr
 
 from .. import schemas, models
+from ..fixtures import fixtures
 
 router = APIRouter()
 
@@ -28,7 +29,8 @@ async def create_fixtures():
     Populate walls with fixture data
     """
     await models.Wall.find_all().delete()
-    la_plaine, croix_niv = models.walls.createData()
-    await la_plaine.create()
+    la_plaine = fixtures.create_la_plaine()
+    croix_niv = fixtures.create_croix_nivert()
     await croix_niv.create()
-    return [la_plaine, croix_niv]
+    await la_plaine.create()
+    return [croix_niv, la_plaine]

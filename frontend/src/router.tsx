@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
 import Root from './routes/root'
-import Home from './routes/home'
+import Home, { loader as wallsLoader } from './routes/home'
 import ErrorPage from './error-page'
 import { Profile } from './routes/profile'
 import Login from './routes/login'
@@ -13,7 +13,7 @@ export const routes = [
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <Home /> },
+      { index: true, element: <Home />, loader: wallsLoader },
       {
         path: 'profile',
         element: <Profile />,

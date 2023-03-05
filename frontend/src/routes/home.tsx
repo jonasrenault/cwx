@@ -1,10 +1,20 @@
 import { Container, Box, Typography, Grid, Card, CardHeader, CardContent } from '@mui/material'
-import { croixNivert, laPlaine } from '../models/wall.fixtures'
+import { useLoaderData, redirect } from 'react-router-dom'
 import { Wall } from '../models/wall'
 import WallViewer from '../components/WallViewer'
+import wallService from '../services/wall.service'
+
+export async function loader() {
+  try {
+    const walls = await wallService.getWalls()
+    return { walls }
+  } catch {
+    return redirect('/')
+  }
+}
 
 export default function Home() {
-  const walls: Array<Wall> = [croixNivert, laPlaine]
+  const { walls } = useLoaderData<Array<Wall>>()
   return (
     <Box>
       {/* Hero unit */}

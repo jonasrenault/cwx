@@ -6,7 +6,17 @@ import { Wall, Area } from '../models/wall'
 import './WallViewer.css'
 
 function drawWall(container, width: number, height: number, wall: Wall) {
-  const svg = d3.select(container).select('svg').attr('width', width).attr('height', height)
+  const xValues = wall.areas.map((area) => area.border.map((border) => border[0])).flat(1)
+  const yValues = wall.areas.map((area) => area.border.map((border) => border[1])).flat(1)
+  const [xmin, xmax] = d3.extent(xValues)
+  const [ymin, ymax] = d3.extent(yValues)
+
+  const svg = d3
+    .select(container)
+    .select('svg')
+    .attr('viewBox', `${xmin} ${ymin} ${xmax - xmin} ${ymax - ymin}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet')
+
   const areas = svg
     .selectAll('.u-area')
     .data(wall.areas)
@@ -76,18 +86,13 @@ interface WallViewProps {
 export default function WallViewer(props: WallViewProps) {
   const ref = useRef<HTMLElement>()
 
-  // const drawWall = () => {
-  //   const svgElement = d3.select(ref.current).select('svg')
-  //   svgElement.append('circle').attr('cx', 150).attr('cy', 70).attr('r', 50)
-  // }
-
   useEffect(() => {
     drawWall(ref.current, props.width, props.height, props.wall)
   })
 
   return (
-    <Box ref={ref}>
-      <svg viewBox='0 0 450 200' className='u-wall' />
+    <Box ref={ref} sx={{ width: props.width, height: props.height }} className='svg-container'>
+      <svg className='u-wall' width={props.width} height={props.height} />
     </Box>
   )
 }

@@ -1,5 +1,7 @@
-from ..models import Wall
-from ..schemas import Area, Rect, Path
+from datetime import datetime
+from typing import List
+from ..models import Wall, Area, Route
+from ..schemas import Rect, Path
 
 
 def create_la_plaine():
@@ -784,3 +786,65 @@ def create_croix_nivert():
     )
 
     return croixNivert
+
+
+def voies_CN_cirque_gauche() -> List[Route]:
+    set_on = datetime(2022, 7, 5)
+    return [
+        Route(
+            lane="1",
+            grade="5a",
+            color="blue",
+            setter="Guillaume",
+            set_on=set_on,
+        ),
+        Route(
+            lane="1",
+            grade="5b",
+            color="orange",
+            setter="Adrien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="1",
+            grade="5c",
+            color="black",
+            setter="Sylvain",
+            set_on=set_on,
+        ),
+        Route(
+            lane="1",
+            grade="6b",
+            color="yellow",
+            setter="Valentin",
+            set_on=set_on,
+        ),
+        Route(
+            lane="2",
+            grade="5a",
+            color="purple",
+            setter="Karla",
+            set_on=set_on,
+        ),
+        Route(
+            lane="2",
+            grade="5c+",
+            color="green",
+            setter="Basile",
+            set_on=set_on,
+        ),
+        Route(
+            lane="2",
+            grade="6a",
+            color="grey",
+            setter="Valentin",
+            set_on=set_on,
+        ),
+        Route(
+            lane="2",
+            grade="6a+",
+            color="white",
+            setter="Pierre-Arnaud",
+            set_on=set_on,
+        ),
+    ]

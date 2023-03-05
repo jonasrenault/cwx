@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "farm-docker"
+name = "pwx"
 version = "0.1.0"
-description = "Backend API for farm-docker"
+description = "Backend API for pwx"
 authors = ["Jonas Renault <jonasrenault@gmail.com>"]
 readme = "README.md"
 packages = [

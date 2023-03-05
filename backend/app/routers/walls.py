@@ -22,11 +22,13 @@ async def get_walls(
     return walls
 
 
-@router.post("", response_model=schemas.Wall)
+@router.post("", response_model=List[schemas.Wall])
 async def create_fixtures():
     """
     Populate walls with fixture data
     """
-    la_plaine = models.walls.createData()
+    await models.Wall.find_all().delete()
+    la_plaine, croix_niv = models.walls.createData()
     await la_plaine.create()
-    return [la_plaine]
+    await croix_niv.create()
+    return [la_plaine, croix_niv]

@@ -1,10 +1,10 @@
-# Fastapi-React-Mongodb-Docker
+# PWX
 
 [![Linting](https://github.com/jonasrenault/fastapi-react-mongodb-docker/actions/workflows/lint.yml/badge.svg)](https://github.com/jonasrenault/fastapi-react-mongodb-docker/actions/workflows/lint.yml)
 
 [![Tests](https://github.com/jonasrenault/fastapi-react-mongodb-docker/actions/workflows/test.yml/badge.svg)](https://github.com/jonasrenault/fastapi-react-mongodb-docker/actions/workflows/test.yml)
 
-This is a template application for a FARM stack. FARM stands for FastAPI, React, MongoDB.
+Webapp for Paris Wall eXplorer.
 
 ## Project structure
 

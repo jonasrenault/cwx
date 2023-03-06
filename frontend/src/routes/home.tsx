@@ -29,7 +29,7 @@ export default function Home() {
         <Grid container spacing={5} alignItems='flex-end'>
           {walls.map((wall) => (
             // Enterprise card is full width at sm breakpoint
-            <Grid item key={wall.key} xs={12} sm={6} md={6}>
+            <Grid item key={wall.key} xs={12} sm={12} md={6}>
               <Card>
                 <CardHeader
                   title={wall.name}

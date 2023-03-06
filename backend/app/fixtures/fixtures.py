@@ -457,6 +457,95 @@ def create_la_plaine():
     return la_plaine
 
 
+def voies_LP_proue() -> List[Route]:
+    set_on = datetime(2023, 3, 3)
+    return [
+        Route(
+            lane="9",
+            grade="6c",
+            color="green",
+            setter="Arnaud / Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="10",
+            grade="6a",
+            color="pink",
+            setter="Guillaume",
+            set_on=set_on,
+        ),
+        Route(
+            lane="13",
+            grade="7a",
+            color="white",
+            setter="Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="14",
+            grade="7a+/b",
+            color="red",
+            setter="Arnaud / Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="15",
+            grade="8a/b",
+            color="orange",
+            setter="Yann / Arnaud",
+            set_on=set_on,
+        ),
+        Route(
+            lane="15",
+            grade="7c",
+            color="blue",
+            setter="Yann / Arnaud",
+            set_on=set_on,
+        ),
+    ]
+
+
+def voies_LP_cirque_droit() -> List[Route]:
+    set_on = datetime(2023, 3, 3)
+    return [
+        Route(
+            lane="17",
+            grade="6a+",
+            color="pink",
+            setter="Katherin",
+            set_on=set_on,
+        ),
+        Route(
+            lane="17",
+            grade="6b",
+            color="red",
+            setter="Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="17",
+            grade="6a",
+            color="yellow",
+            setter="Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="18",
+            grade="7b",
+            color="black",
+            setter="Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="18",
+            grade="7a",
+            color="green",
+            setter="Tomasz",
+            set_on=set_on,
+        ),
+    ]
+
+
 def create_croix_nivert():
     bloc = Area(
         name="bloc",
@@ -845,6 +934,68 @@ def voies_CN_cirque_gauche() -> List[Route]:
             grade="6a+",
             color="white",
             setter="Pierre-Arnaud",
+            set_on=set_on,
+        ),
+    ]
+
+
+def voies_CN_vertical_droit() -> List[Route]:
+    set_on = datetime(2022, 7, 5)
+    return [
+        Route(
+            lane="16",
+            grade="4b",
+            color="grey",
+            setter="Valentin",
+            set_on=set_on,
+        ),
+        Route(
+            lane="16",
+            grade="5b",
+            color="green",
+            setter="Basile",
+            set_on=set_on,
+        ),
+        Route(
+            lane="16",
+            grade="6a+",
+            color="orange",
+            setter="Pierre-Arnaud",
+            set_on=set_on,
+        ),
+        Route(
+            lane="16",
+            grade="6b+",
+            color="pink",
+            setter="Katherin",
+            set_on=set_on,
+        ),
+        Route(
+            lane="17",
+            grade="4",
+            color="purple",
+            setter="Valentin",
+            set_on=set_on,
+        ),
+        Route(
+            lane="17",
+            grade="5c",
+            color="black",
+            setter="Adrien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="17",
+            grade="6b",
+            color="yellow",
+            setter="Basile",
+            set_on=set_on,
+        ),
+        Route(
+            lane="17",
+            grade="6a+",
+            color="blue",
+            setter="Basile",
             set_on=set_on,
         ),
     ]

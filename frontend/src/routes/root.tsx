@@ -13,6 +13,7 @@ export default function Root() {
           flexGrow: 1,
           height: '100vh',
           overflow: 'auto',
+          paddingBottom: 5,
         }}
       >
         <Toolbar></Toolbar>

@@ -1,7 +1,18 @@
-import { Container, Box, Typography, Grid, Card, CardHeader, CardContent } from '@mui/material'
+import {
+  Container,
+  Box,
+  Typography,
+  Grid,
+  Card,
+  CardHeader,
+  CardContent,
+  List,
+  ListItem,
+} from '@mui/material'
 import { useLoaderData, redirect } from 'react-router-dom'
 import { Wall } from '../models/wall'
 import WallViewer from '../components/WallViewer'
+import RouteList from '../components/RouteList'
 import wallService from '../services/wall.service'
 
 export async function loader() {
@@ -43,6 +54,7 @@ export default function Home() {
                   <Box>
                     <WallViewer wall={wall} />
                   </Box>
+                  {wall.routes && <RouteList routes={wall.routes} />}
                 </CardContent>
                 {/* <CardActions>
                   <Button fullWidth variant={tier.buttonVariant as 'outlined' | 'contained'}>

@@ -64,16 +64,40 @@ async def create_fixtures():
     croix_nivert = await croix_niv.insert(link_rule=WriteRules.WRITE)
     await la_plaine.insert(link_rule=WriteRules.WRITE)
 
-    voies_proue = fixtures.voies_LP_proue()
-    area = la_plaine.areas[2]
+    voies_DG = fixtures.voies_LP_devers_gauche()
+    area = la_plaine.areas[0]
     routes = []
-    for voie in voies_proue:
+    for voie in voies_DG:
+        voie.area = area
+        routes.append(await voie.create())
+
+    voies_LP_CG = fixtures.voies_LP_cirque_gauche()
+    area = la_plaine.areas[1]
+    for voie in voies_LP_CG:
+        voie.area = area
+        routes.append(await voie.create())
+
+    voies_LP_proue = fixtures.voies_LP_proue()
+    area = la_plaine.areas[2]
+    for voie in voies_LP_proue:
         voie.area = area
         routes.append(await voie.create())
 
     voies_CD = fixtures.voies_LP_cirque_droit()
     area = la_plaine.areas[3]
     for voie in voies_CD:
+        voie.area = area
+        routes.append(await voie.create())
+
+    voies_LP_petit_toit = fixtures.voies_LP_petit_toit()
+    area = la_plaine.areas[4]
+    for voie in voies_LP_petit_toit:
+        voie.area = area
+        routes.append(await voie.create())
+
+    voies_LP_DD = fixtures.voies_LP_DD()
+    area = la_plaine.areas[5]
+    for voie in voies_LP_DD:
         voie.area = area
         routes.append(await voie.create())
 
@@ -87,8 +111,26 @@ async def create_fixtures():
         voie.area = area
         routes.append(await voie.create())
 
+    voies_CN_proue = fixtures.voies_CN_proue()
+    area = croix_nivert.areas[2]
+    for voie in voies_CN_proue:
+        voie.area = area
+        routes.append(await voie.create())
+
+    voies_CN_CD = fixtures.voies_CN_cirque_droit()
+    area = croix_nivert.areas[3]
+    for voie in voies_CN_CD:
+        voie.area = area
+        routes.append(await voie.create())
+
+    voies_dalle = fixtures.voies_CN_dalle()
+    area = croix_nivert.areas[4]
+    for voie in voies_dalle:
+        voie.area = area
+        routes.append(await voie.create())
+
     voies_VD = fixtures.voies_CN_vertical_droit()
-    area = croix_nivert.areas[-1]
+    area = croix_nivert.areas[5]
     for voie in voies_VD:
         voie.area = area
         routes.append(await voie.create())

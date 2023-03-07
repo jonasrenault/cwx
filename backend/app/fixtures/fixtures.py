@@ -457,6 +457,179 @@ def create_la_plaine():
     return la_plaine
 
 
+def voies_LP_devers_gauche() -> List[Route]:
+    set_on = datetime(2023, 3, 3)
+    return [
+        Route(
+            lane="1",
+            grade="4a",
+            color="blue",
+            setter="Karla",
+            set_on=set_on,
+        ),
+        Route(
+            lane="1",
+            grade="6b",
+            color="white",
+            setter="Katherine",
+            set_on=set_on,
+        ),
+        Route(
+            lane="1",
+            grade="5a",
+            color="red",
+            setter="Damien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="2",
+            grade="5c",
+            color="black",
+            setter="Tomasz",
+            set_on=set_on,
+        ),
+        Route(
+            lane="2",
+            grade="6a",
+            color="pink",
+            setter="Damien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="2",
+            grade="6b+",
+            color="yellow",
+            setter="Damien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="3",
+            grade="5a",
+            color="white",
+            setter="Katherine",
+            set_on=set_on,
+        ),
+        Route(
+            lane="3",
+            grade="6b",
+            color="orange",
+            setter="Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="3",
+            grade="5b",
+            color="green",
+            setter="Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="4",
+            grade="7a",
+            color="blue",
+            setter="Damien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="4",
+            grade="6b",
+            color="red",
+            setter="Damien",
+            set_on=set_on,
+        ),
+    ]
+
+
+def voies_LP_cirque_gauche() -> List[Route]:
+    set_on = datetime(2023, 3, 3)
+    return [
+        Route(
+            lane="4",
+            grade="6a",
+            color="black",
+            setter="Tomasz",
+            set_on=set_on,
+        ),
+        Route(
+            lane="5",
+            grade="5b",
+            color="pink",
+            setter="Tomasz",
+            set_on=set_on,
+        ),
+        Route(
+            lane="6",
+            grade="5c",
+            color="green",
+            setter="Damien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="6",
+            grade="5b",
+            color="orange",
+            setter="Babis",
+            set_on=set_on,
+        ),
+        Route(
+            lane="6",
+            grade="6a",
+            color="white",
+            setter="Babis",
+            set_on=set_on,
+        ),
+        Route(
+            lane="6",
+            grade="6a+",
+            color="pink",
+            setter="Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="7",
+            grade="7a",
+            color="red",
+            setter="Guillaume",
+            set_on=set_on,
+        ),
+        Route(
+            lane="7",
+            grade="6c",
+            color="yellow",
+            setter="Damien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="7",
+            grade="7b",
+            color="black",
+            setter="Tomasz",
+            set_on=set_on,
+        ),
+        Route(
+            lane="8",
+            grade="6b+",
+            color="orange",
+            setter="Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="9",
+            grade="7c",
+            color="black",
+            setter="Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="9",
+            grade="7b",
+            color="yellow",
+            setter="Arnaud",
+            set_on=set_on,
+        ),
+    ]
+
+
 def voies_LP_proue() -> List[Route]:
     set_on = datetime(2023, 3, 3)
     return [
@@ -512,7 +685,7 @@ def voies_LP_cirque_droit() -> List[Route]:
             lane="17",
             grade="6a+",
             color="pink",
-            setter="Katherin",
+            setter="Katherine",
             set_on=set_on,
         ),
         Route(
@@ -541,6 +714,165 @@ def voies_LP_cirque_droit() -> List[Route]:
             grade="7a",
             color="green",
             setter="Tomasz",
+            set_on=set_on,
+        ),
+    ]
+
+
+def voies_LP_petit_toit() -> List[Route]:
+    set_on = datetime(2023, 3, 3)
+    return [
+        Route(
+            lane="20",
+            grade="5c",
+            color="yellow",
+            setter="Damien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="20",
+            grade="7b+",
+            color="red",
+            setter="Babis",
+            set_on=set_on,
+        ),
+        Route(
+            lane="20",
+            grade="5c",
+            color="blue",
+            setter="Guillaume",
+            set_on=set_on,
+        ),
+        Route(
+            lane="20",
+            grade="5a",
+            color="orange",
+            setter="Tomasz",
+            set_on=set_on,
+        ),
+        Route(
+            lane="21",
+            grade="6b",
+            color="black",
+            setter="Damien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="22",
+            grade="6b",
+            color="green",
+            setter="Tomasz",
+            set_on=set_on,
+        ),
+        Route(
+            lane="22",
+            grade="5c",
+            color="blue",
+            setter="Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="22",
+            grade="7b",
+            color="pink",
+            setter="Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="24",
+            grade="6c",
+            color="orange",
+            setter="Guillaume",
+            set_on=set_on,
+        ),
+        Route(
+            lane="24",
+            grade="6b",
+            color="green",
+            setter="Katherine",
+            set_on=set_on,
+        ),
+    ]
+
+
+def voies_LP_DD() -> List[Route]:
+    set_on = datetime(2023, 3, 3)
+    return [
+        Route(
+            lane="23",
+            grade="7a",
+            color="red",
+            setter="Karla",
+            set_on=set_on,
+        ),
+        Route(
+            lane="23",
+            grade="5a",
+            color="white",
+            setter="Karla",
+            set_on=set_on,
+        ),
+        Route(
+            lane="25",
+            grade="5b",
+            color="blue",
+            setter="Guillaume",
+            set_on=set_on,
+        ),
+        Route(
+            lane="25",
+            grade="6b",
+            color="black",
+            setter="Damien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="25",
+            grade="7a",
+            color="pink",
+            setter="Damien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="25",
+            grade="6a",
+            color="yellow",
+            setter="Guillaume",
+            set_on=set_on,
+        ),
+        Route(
+            lane="26",
+            grade="6a",
+            color="orange",
+            setter="Karla",
+            set_on=set_on,
+        ),
+        Route(
+            lane="26",
+            grade="5a",
+            color="green",
+            setter="Babis",
+            set_on=set_on,
+        ),
+        Route(
+            lane="26",
+            grade="7b",
+            color="white",
+            setter="Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="27",
+            grade="5a+",
+            color="blue",
+            setter="Damien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="27",
+            grade="6c",
+            color="pink",
+            setter="Damien",
             set_on=set_on,
         ),
     ]
@@ -878,6 +1210,9 @@ def create_croix_nivert():
 
 
 def voies_CN_cirque_gauche() -> List[Route]:
+    """
+    Lanes 1-4
+    """
     set_on = datetime(2022, 7, 5)
     return [
         Route(
@@ -936,12 +1271,396 @@ def voies_CN_cirque_gauche() -> List[Route]:
             setter="Pierre-Arnaud",
             set_on=set_on,
         ),
+        Route(
+            lane="3",
+            grade="5a",
+            color="yellow",
+            setter="Guillaume",
+            set_on=set_on,
+        ),
+        Route(
+            lane="3",
+            grade="5c",
+            color="orange",
+            setter="Adrien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="3",
+            grade="6a",
+            color="red",
+            setter="Pascal",
+            set_on=set_on,
+        ),
+        Route(
+            lane="3",
+            grade="6b+",
+            color="black",
+            setter="Basile",
+            set_on=set_on,
+        ),
+        Route(
+            lane="4",
+            grade="5b",
+            color="white",
+            setter="Sylvain",
+            set_on=set_on,
+        ),
+        Route(
+            lane="4",
+            grade="5c",
+            color="green",
+            setter="Pierre-Arnaud",
+            set_on=set_on,
+        ),
+        Route(
+            lane="4",
+            grade="6a+",
+            color="pink",
+            setter="Valentin",
+            set_on=set_on,
+        ),
+    ]
+
+
+def voies_CN_proue() -> List[Route]:
+    """
+    Lanes 5-7
+    """
+    set_on = datetime(2022, 7, 5)
+    return [
+        Route(
+            lane="5",
+            grade="5b",
+            color="red",
+            setter="Sylvain",
+            set_on=set_on,
+        ),
+        Route(
+            lane="5",
+            grade="6a",
+            color="yellow",
+            setter="Valentin",
+            set_on=set_on,
+        ),
+        Route(
+            lane="5",
+            grade="6c",
+            color="black",
+            setter="Sylvain",
+            set_on=set_on,
+        ),
+        Route(
+            lane="5",
+            grade="7a",
+            color="blue",
+            setter="Adrien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="6",
+            grade="5a",
+            color="orange",
+            setter="Sylvain",
+            set_on=set_on,
+        ),
+        Route(
+            lane="6",
+            grade="5c+",
+            color="grey",
+            setter="Basile",
+            set_on=set_on,
+        ),
+        Route(
+            lane="6",
+            grade="6b+",
+            color="green",
+            setter="Sylvain",
+            set_on=set_on,
+        ),
+        Route(
+            lane="6",
+            grade="7a",
+            color="purple",
+            setter="Valentin",
+            set_on=set_on,
+        ),
+        Route(
+            lane="7",
+            grade="5b",
+            color="blue",
+            setter="Adrien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="7",
+            grade="6a",
+            color="black",
+            setter="Guillaume",
+            set_on=set_on,
+        ),
+        Route(
+            lane="7",
+            grade="6c",
+            color="red",
+            setter="Pierre-Arnaud",
+            set_on=set_on,
+        ),
+        Route(
+            lane="7",
+            grade="7a",
+            color="yellow",
+            setter="Sylvain",
+            set_on=set_on,
+        ),
+    ]
+
+
+def voies_CN_cirque_droit() -> List[Route]:
+    """
+    Lanes 8-11
+    """
+    set_on = datetime(2022, 7, 5)
+    return [
+        Route(
+            lane="8",
+            grade="5b",
+            color="green",
+            setter="Valentin",
+            set_on=set_on,
+        ),
+        Route(
+            lane="8",
+            grade="5c",
+            color="purple",
+            setter="Adrien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="8",
+            grade="6b",
+            color="pink",
+            setter="Guillaume",
+            set_on=set_on,
+        ),
+        Route(
+            lane="8",
+            grade="6b+",
+            color="orange",
+            setter="Pascal",
+            set_on=set_on,
+        ),
+        Route(
+            lane="9",
+            grade="5a",
+            color="black",
+            setter="Adrien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="9",
+            grade="5c+",
+            color="blue",
+            setter="Basile",
+            set_on=set_on,
+        ),
+        Route(
+            lane="9",
+            grade="6a",
+            color="yellow",
+            setter="Sylvain",
+            set_on=set_on,
+        ),
+        Route(
+            lane="9",
+            grade="6b",
+            color="red",
+            setter="Adrien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="10",
+            grade="4c",
+            color="orange",
+            setter="Valentin",
+            set_on=set_on,
+        ),
+        Route(
+            lane="10",
+            grade="5b",
+            color="purple",
+            setter="Valentin",
+            set_on=set_on,
+        ),
+        Route(
+            lane="10",
+            grade="6a",
+            color="grey",
+            setter="Sylvain",
+            set_on=set_on,
+        ),
+        Route(
+            lane="10",
+            grade="6b",
+            color="green",
+            setter="Valentin",
+            set_on=set_on,
+        ),
+        Route(
+            lane="11",
+            grade="4b",
+            color="black",
+            setter="Sylvain",
+            set_on=set_on,
+        ),
+        Route(
+            lane="11",
+            grade="5c+",
+            color="yellow",
+            setter="Basile",
+            set_on=set_on,
+        ),
+        Route(
+            lane="11",
+            grade="5c",
+            color="blue",
+            setter="Pascal",
+            set_on=set_on,
+        ),
+        Route(
+            lane="11",
+            grade="5b",
+            color="red",
+            setter="Sylvain",
+            set_on=set_on,
+        ),
+    ]
+
+
+def voies_CN_dalle() -> List[Route]:
+    """
+    lanes 12-14
+    """
+    set_on = datetime(2022, 7, 5)
+    return [
+        Route(
+            lane="12",
+            grade="4c",
+            color="grey",
+            setter="Adrien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="12",
+            grade="5a",
+            color="green",
+            setter="Pascal",
+            set_on=set_on,
+        ),
+        Route(
+            lane="12",
+            grade="5c",
+            color="orange",
+            setter="Basile",
+            set_on=set_on,
+        ),
+        Route(
+            lane="12",
+            grade="5b+",
+            color="purple",
+            setter="Valentin",
+            set_on=set_on,
+        ),
+        Route(
+            lane="13",
+            grade="4",
+            color="white",
+            setter="Adrien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="13",
+            grade="5a",
+            color="red",
+            setter="Guillaume",
+            set_on=set_on,
+        ),
+        Route(
+            lane="13",
+            grade="5b",
+            color="blue",
+            setter="Pascal",
+            set_on=set_on,
+        ),
+        Route(
+            lane="13",
+            grade="6b",
+            color="black",
+            setter="Pierre-Arnaud",
+            set_on=set_on,
+        ),
+        Route(
+            lane="14",
+            grade="4c",
+            color="purple",
+            setter="Pierre-Arnaud",
+            set_on=set_on,
+        ),
+        Route(
+            lane="14",
+            grade="5a+",
+            color="rose",
+            setter="Pascal",
+            set_on=set_on,
+        ),
+        Route(
+            lane="14",
+            grade="5c",
+            color="orange",
+            setter="Basile",
+            set_on=set_on,
+        ),
+        Route(
+            lane="14",
+            grade="6c",
+            color="green",
+            setter="Adrien",
+            set_on=set_on,
+        ),
     ]
 
 
 def voies_CN_vertical_droit() -> List[Route]:
     set_on = datetime(2022, 7, 5)
     return [
+        Route(
+            lane="15",
+            grade="4c",
+            color="white",
+            setter="Basile",
+            set_on=set_on,
+        ),
+        Route(
+            lane="15",
+            grade="5b+",
+            color="yellow",
+            setter="Karla",
+            set_on=set_on,
+        ),
+        Route(
+            lane="15",
+            grade="6a+",
+            color="blue",
+            setter="Adrien",
+            set_on=set_on,
+        ),
+        Route(
+            lane="15",
+            grade="6b",
+            color="purple",
+            setter="Katherine",
+            set_on=set_on,
+        ),
         Route(
             lane="16",
             grade="4b",
@@ -967,7 +1686,7 @@ def voies_CN_vertical_droit() -> List[Route]:
             lane="16",
             grade="6b+",
             color="pink",
-            setter="Katherin",
+            setter="Katherine",
             set_on=set_on,
         ),
         Route(

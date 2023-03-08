@@ -40,4 +40,6 @@ export interface Route {
   setter: string
   set_on: Date
   removed_on: Date
+  area: Area
+  wall: Wall
 }

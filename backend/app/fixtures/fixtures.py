@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import List
-from ..models import Wall, Area, Route
-from ..schemas import Rect, Path
+from ..models import Wall, Area, Route, Rect, Path
 
 
 def create_la_plaine():

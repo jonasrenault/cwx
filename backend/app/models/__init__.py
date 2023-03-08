@@ -1,2 +1,2 @@
 from .users import User
-from .walls import Wall, Area, Route
+from .walls import Wall, Area, Route, Rect, Path

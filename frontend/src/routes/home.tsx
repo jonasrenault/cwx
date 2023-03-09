@@ -1,4 +1,4 @@
-import { Container, Box, Typography, Grid, Card, CardHeader, CardContent } from '@mui/material'
+import { Container, Box, Typography, Grid } from '@mui/material'
 import { useLoaderData, redirect } from 'react-router-dom'
 import { Wall } from '../models/wall'
 import WallCard from '../components/WallCard'
@@ -26,7 +26,7 @@ export default function Home() {
 
       {/* End hero unit */}
       <Container maxWidth='md' component='main'>
-        <Grid container spacing={5} alignItems='flex-end'>
+        <Grid container spacing={5}>
           {walls.map((wall) => (
             <Grid item key={wall.key} xs={12} sm={12} md={6}>
               <WallCard wall={wall} />

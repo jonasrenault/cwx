@@ -31,8 +31,16 @@ export default function RouteCard(props: RouteCardProps) {
     <Card sx={{ width: '100%' }} variant='outlined'>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: route.color }} aria-label='recipe'>
-            {route.grade}
+          <Avatar
+            sx={{
+              bgcolor: route.color === 'yellow' ? '#ffeb3b' : route.color,
+              color: ['white', 'yellow'].indexOf(route.color) >= 0 ? '#000' : 'palette.primary',
+              border: route.color === 'white' ? '2px solid' : 'none',
+              fontSize: route.grade.length > 3 ? '.8rem' : '1.25rem',
+            }}
+            aria-label='recipe'
+          >
+            {route.grade.split('').map((c) => (c === '+' ? <sup key={c}>+</sup> : c))}
           </Avatar>
         }
         action={
@@ -40,8 +48,8 @@ export default function RouteCard(props: RouteCardProps) {
             <ExpandMoreIcon />
           </IconButton>
         }
-        title={route.lane + '(' + route.area.name + ')'}
-        subheader={route.setter}
+        title={route.setter}
+        subheader={`Couloir ${route.lane}`}
       />
 
       <CardActions disableSpacing>

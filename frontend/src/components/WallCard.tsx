@@ -1,4 +1,5 @@
-import { useState, useMemo, useEffect, ChangeEvent } from 'react'
+import { useState, useMemo, useEffect, useCallback, ChangeEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Box,
   Card,
@@ -10,7 +11,7 @@ import {
 } from '@mui/material'
 import Fuse from 'fuse.js'
 import debounce from 'lodash.debounce'
-import { Wall, Area } from '../models/wall'
+import { Wall, Area, Route } from '../models/wall'
 import WallViewer from './WallViewer'
 import RouteList from './RouteList'
 import SearchIcon from '@mui/icons-material/Search'
@@ -25,6 +26,7 @@ export default function WallCard(props: WallCardProps) {
   const [routes, setRoutes] = useState(wall.routes)
   const [query, setQuery] = useState('')
   const [selectedArea, setSelectedArea] = useState(null)
+  const navigate = useNavigate()
   const options = {
     threshold: 0.2,
     keys: ['setter', 'grade'],
@@ -73,6 +75,10 @@ export default function WallCard(props: WallCardProps) {
       debouncedSearchHandler.cancel()
     }
   }, [debouncedSearchHandler])
+
+  const onRouteClick = useCallback((route: Route) => {
+    navigate(`/wall/${wall._id}/${route._id}`)
+  }, [])
 
   return (
     <Card>
@@ -143,7 +149,7 @@ export default function WallCard(props: WallCardProps) {
             ),
           }}
         />
-        {routes && <RouteList routes={routes} />}
+        {routes && <RouteList routes={routes} handleRouteClick={onRouteClick} />}
       </CardContent>
     </Card>
   )

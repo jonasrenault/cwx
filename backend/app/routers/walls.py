@@ -32,6 +32,24 @@ async def get_walls(
     return response
 
 
+@router.get("/{id}", response_model=schemas.WallWithRoutes)
+async def get_walls(
+    id: PydanticObjectId,
+    fetch_routes: bool = False,
+):
+    """
+    Get a wall
+    """
+    wall = await models.Wall.get(id, fetch_links=True)
+
+    if not fetch_routes:
+        return wall
+
+    routes = await models.Route.find(models.Route.wall.id == wall.id).to_list()
+    response = schemas.WallWithRoutes(**wall.dict(), routes=routes)
+    return response
+
+
 @router.get("/{id}/routes", response_model=List[models.Route])
 async def get_wall_routes(
     id: PydanticObjectId,

@@ -8,21 +8,29 @@ import {
   Avatar,
   ListItemText,
 } from '@mui/material'
+import { useParams } from 'react-router-dom'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { Route } from '../models/wall'
 
 interface RouteListProprs {
   routes: Array<Route>
+  handleRouteClick: (route: Route) => void
 }
 
 export default function RouteList(props: RouteListProprs) {
-  const { routes } = props
+  const { routes, handleRouteClick } = props
+  const { routeId: activeRouteId } = useParams()
 
   return (
     <List dense={true} sx={{ overflow: 'auto', maxHeight: 300 }}>
       {routes.map((route) => (
-        <ListItemButton key={route._id}>
+        <ListItemButton
+          key={route._id}
+          onClick={() => handleRouteClick(route)}
+          selected={route._id === activeRouteId}
+          autoFocus={route._id === activeRouteId}
+        >
           <ListItem
             secondaryAction={
               <IconButton edge='end' aria-label='favorite'>

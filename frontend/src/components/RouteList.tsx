@@ -40,7 +40,6 @@ export default function RouteList(props: RouteListProprs) {
                 }}
                 aria-label='recipe'
               >
-                {/* {route.grade} */}
                 {route.grade.split('').map((c) => (c === '+' ? <sup key={c}>+</sup> : c))}
               </Avatar>
             </ListItemAvatar>

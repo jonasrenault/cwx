@@ -381,7 +381,7 @@ def create_la_plaine():
     )
 
     petit_devers_droit = Area(
-        name="petit devers gauche",
+        name="petit devers droit",
         paths=[
             Path(
                 type="fill",

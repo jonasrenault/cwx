@@ -34,9 +34,11 @@ function drawBorder(border: [number, number][]) {
 }
 
 interface WallViewProps {
-  width: number
-  height: number
+  width?: number
+  height?: number
   wall: Wall
+  selectedArea?: Area
+  onAreaSelected: (area: Area) => void
 }
 
 export default function WallViewer(props: WallViewProps) {
@@ -49,7 +51,6 @@ export default function WallViewer(props: WallViewProps) {
   const [ymin, ymax] = d3.extent(yValues)
 
   const [highlightedArea, setHighlightedArea] = useState(null)
-  const [selectedArea, setSelectedArea] = useState(null)
 
   const handleMouseEnter = (area: Area) => {
     setHighlightedArea(area)
@@ -57,10 +58,6 @@ export default function WallViewer(props: WallViewProps) {
 
   const handleMouseLeave = () => {
     setHighlightedArea(null)
-  }
-
-  const handleMouseClick = (area: Area) => {
-    setSelectedArea(area)
   }
 
   return (
@@ -74,11 +71,11 @@ export default function WallViewer(props: WallViewProps) {
       >
         {props.wall.areas?.map((area) => (
           <g
-            className={'u-area' + (selectedArea?._id === area._id ? ' selected' : '')}
+            className={'u-area' + (props.selectedArea?._id === area._id ? ' selected' : '')}
             key={area._id}
             onMouseOver={() => handleMouseEnter(area)}
             onMouseLeave={() => handleMouseLeave()}
-            onClick={() => handleMouseClick(area)}
+            onClick={() => props.onAreaSelected(area)}
           >
             {area.paths.map((path) => (
               <path
@@ -96,22 +93,5 @@ export default function WallViewer(props: WallViewProps) {
         )}
       </svg>
     </Box>
-  )
-}
-
-const AreaSVG = ({ area, isHighlighted }) => {
-  return (
-    <g className='u-area'>
-      {area.paths.map((path) => (
-        <path
-          key={drawShape(path).toString()}
-          className='u-path'
-          stroke={path.color}
-          fill={path.color}
-          d={drawShape(path).toString()}
-          opacity={isHighlighted ? '50%' : '100%'}
-        ></path>
-      ))}
-    </g>
   )
 }

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useState, useMemo, useEffect, ChangeEvent } from 'react'
 import {
   Box,
   Card,
@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import Fuse from 'fuse.js'
 import debounce from 'lodash.debounce'
-import { Wall } from '../models/wall'
+import { Wall, Area } from '../models/wall'
 import WallViewer from './WallViewer'
 import RouteList from './RouteList'
 import SearchIcon from '@mui/icons-material/Search'
@@ -22,33 +22,57 @@ interface WallCardProps {
 
 export default function WallCard(props: WallCardProps) {
   const { wall } = props
-  const [routes, setRoutes] = React.useState(wall.routes)
-  const [query, setQuery] = React.useState('')
+  const [routes, setRoutes] = useState(wall.routes)
+  const [query, setQuery] = useState('')
+  const [selectedArea, setSelectedArea] = useState(null)
   const options = {
     threshold: 0.2,
     keys: ['setter', 'grade'],
   }
   const fuse = new Fuse(routes, options)
 
-  const search = (searchQuery) => {
-    if (searchQuery) {
-      setRoutes(fuse.search(searchQuery).map((item) => item.item))
+  const search = (textQuery: string, area: Area) => {
+    let searchRoutes
+    if (textQuery) {
+      searchRoutes = fuse.search(textQuery).map((item) => item.item)
+      setRoutes()
     } else {
-      setRoutes(wall.routes)
+      searchRoutes = wall.routes
     }
+
+    if (area) {
+      searchRoutes = searchRoutes.filter((route) => route.area.id === area._id)
+    }
+    setRoutes(searchRoutes)
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value)
-    debouncedSearchHandler(event.target.value)
+    debouncedSearchHandler(event.target.value, selectedArea)
   }
 
   const handleClearSearch = () => {
     setQuery('')
-    debouncedSearchHandler('')
+    debouncedSearchHandler('', selectedArea)
   }
 
-  const debouncedSearchHandler = React.useMemo(() => debounce(search, 300), [setRoutes])
+  const handleAreaSelected = (area: Area) => {
+    setSelectedArea(area)
+    debouncedSearchHandler(query, area)
+  }
+
+  const handleClearArea = () => {
+    setSelectedArea()
+    debouncedSearchHandler(query, null)
+  }
+
+  const debouncedSearchHandler = useMemo(() => debounce(search, 300), [setRoutes])
+
+  useEffect(() => {
+    return () => {
+      debouncedSearchHandler.cancel()
+    }
+  }, [debouncedSearchHandler])
 
   return (
     <Card>
@@ -61,9 +85,36 @@ export default function WallCard(props: WallCardProps) {
         }}
       />
       <CardContent>
-        <Box>
-          <WallViewer wall={wall} />
+        <Box sx={{ my: 1 }}>
+          <WallViewer wall={wall} selectedArea={selectedArea} onAreaSelected={handleAreaSelected} />
         </Box>
+
+        {selectedArea && (
+          <Box sx={{ my: 1 }}>
+            <TextField
+              disabled
+              label='Secteur'
+              value={selectedArea.name}
+              variant='standard'
+              sx={{ width: 1.0 }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <IconButton
+                      aria-label='clear area'
+                      onClick={handleClearArea}
+                      edge='end'
+                      color='text.secondary'
+                      size='small'
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+        )}
 
         <TextField
           sx={{ width: 1.0, py: 1 }}
@@ -80,7 +131,12 @@ export default function WallCard(props: WallCardProps) {
             ),
             endAdornment: query && (
               <InputAdornment position='end'>
-                <IconButton aria-label='clear search' onClick={handleClearSearch} edge='end'>
+                <IconButton
+                  aria-label='clear search'
+                  onClick={handleClearSearch}
+                  edge='end'
+                  size='small'
+                >
                   <ClearIcon />
                 </IconButton>
               </InputAdornment>

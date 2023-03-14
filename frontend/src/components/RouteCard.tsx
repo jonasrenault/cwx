@@ -15,13 +15,15 @@ import ShareIcon from '@mui/icons-material/Share'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Route } from '../models/wall'
 
+const API_URL = import.meta.env.VITE_BACKEND_API_URL
+
 interface RouteCardProps {
   route: Route
 }
 
 export default function RouteCard(props: RouteCardProps) {
   const { route } = props
-  const [expanded, setExpanded] = React.useState(false)
+  const [expanded, setExpanded] = React.useState(true)
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
@@ -61,13 +63,16 @@ export default function RouteCard(props: RouteCardProps) {
         </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout='auto' unmountOnExit>
-        <CardMedia
-          component='img'
-          height='194'
-          image='/static/images/cards/paella.jpg'
-          alt='Paella dish'
-        />
-        <CardContent>
+        {route.img_path && (
+          <CardMedia
+            component='img'
+            sx={{ objectFit: 'contain', height: 600 }}
+            image={`${API_URL}static/${route.img_path}`}
+            alt='Paella dish'
+          />
+        )}
+
+        {/* <CardContent>
           <Typography paragraph>Method:</Typography>
           <Typography paragraph>
             Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
@@ -91,7 +96,7 @@ export default function RouteCard(props: RouteCardProps) {
           <Typography>
             Set aside off of the heat to let rest for 10 minutes, and then serve.
           </Typography>
-        </CardContent>
+        </CardContent> */}
       </Collapse>
     </Card>
   )

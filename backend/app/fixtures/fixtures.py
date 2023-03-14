@@ -1,6 +1,10 @@
+import shutil
+import pathlib
 from datetime import datetime
 from typing import List
+from beanie import PydanticObjectId
 from ..models import Wall, Area, Route, Rect, Path
+from ..config.config import settings
 
 
 def create_la_plaine():
@@ -536,12 +540,6 @@ def voies_LP_devers_gauche() -> List[Route]:
             setter="Damien",
             set_on=set_on,
         ),
-    ]
-
-
-def voies_LP_cirque_gauche() -> List[Route]:
-    set_on = datetime(2023, 3, 3)
-    return [
         Route(
             lane="4",
             grade="6a",
@@ -549,6 +547,12 @@ def voies_LP_cirque_gauche() -> List[Route]:
             setter="Tomasz",
             set_on=set_on,
         ),
+    ]
+
+
+def voies_LP_cirque_gauche() -> List[Route]:
+    set_on = datetime(2023, 3, 3)
+    return [
         Route(
             lane="5",
             grade="5b",
@@ -578,13 +582,6 @@ def voies_LP_cirque_gauche() -> List[Route]:
             set_on=set_on,
         ),
         Route(
-            lane="6",
-            grade="6a+",
-            color="pink",
-            setter="Yann",
-            set_on=set_on,
-        ),
-        Route(
             lane="7",
             grade="7a",
             color="red",
@@ -607,6 +604,13 @@ def voies_LP_cirque_gauche() -> List[Route]:
         ),
         Route(
             lane="8",
+            grade="6a+",
+            color="pink",
+            setter="Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="8",
             grade="6b+",
             color="orange",
             setter="Yann",
@@ -614,13 +618,20 @@ def voies_LP_cirque_gauche() -> List[Route]:
         ),
         Route(
             lane="9",
+            grade="6a",
+            color="pink",
+            setter="Guillaume",
+            set_on=set_on,
+        ),
+        Route(
+            lane="10",
             grade="7c",
             color="black",
             setter="Yann",
             set_on=set_on,
         ),
         Route(
-            lane="9",
+            lane="11",
             grade="7b",
             color="yellow",
             setter="Arnaud",
@@ -633,17 +644,10 @@ def voies_LP_proue() -> List[Route]:
     set_on = datetime(2023, 3, 3)
     return [
         Route(
-            lane="9",
+            lane="12",
             grade="6c",
             color="green",
             setter="Arnaud / Yann",
-            set_on=set_on,
-        ),
-        Route(
-            lane="10",
-            grade="6a",
-            color="pink",
-            setter="Guillaume",
             set_on=set_on,
         ),
         Route(
@@ -655,23 +659,23 @@ def voies_LP_proue() -> List[Route]:
         ),
         Route(
             lane="14",
-            grade="7a+/b",
-            color="red",
-            setter="Arnaud / Yann",
-            set_on=set_on,
-        ),
-        Route(
-            lane="15",
             grade="8a/b",
             color="orange",
             setter="Yann / Arnaud",
             set_on=set_on,
         ),
         Route(
-            lane="15",
+            lane="14",
             grade="7c",
             color="blue",
             setter="Yann / Arnaud",
+            set_on=set_on,
+        ),
+        Route(
+            lane="15",
+            grade="7a+/b",
+            color="red",
+            setter="Arnaud / Yann",
             set_on=set_on,
         ),
     ]
@@ -680,13 +684,6 @@ def voies_LP_proue() -> List[Route]:
 def voies_LP_cirque_droit() -> List[Route]:
     set_on = datetime(2023, 3, 3)
     return [
-        Route(
-            lane="17",
-            grade="6a+",
-            color="pink",
-            setter="Katherine",
-            set_on=set_on,
-        ),
         Route(
             lane="17",
             grade="6b",
@@ -702,17 +699,24 @@ def voies_LP_cirque_droit() -> List[Route]:
             set_on=set_on,
         ),
         Route(
-            lane="18",
+            lane="17",
             grade="7b",
             color="black",
             setter="Yann",
             set_on=set_on,
         ),
         Route(
-            lane="18",
+            lane="17",
             grade="7a",
             color="green",
             setter="Tomasz",
+            set_on=set_on,
+        ),
+        Route(
+            lane="18",
+            grade="6a+",
+            color="pink",
+            setter="Katherine",
             set_on=set_on,
         ),
     ]
@@ -723,13 +727,6 @@ def voies_LP_petit_toit() -> List[Route]:
     return [
         Route(
             lane="20",
-            grade="5c",
-            color="yellow",
-            setter="Damien",
-            set_on=set_on,
-        ),
-        Route(
-            lane="20",
             grade="7b+",
             color="red",
             setter="Babis",
@@ -737,7 +734,7 @@ def voies_LP_petit_toit() -> List[Route]:
         ),
         Route(
             lane="20",
-            grade="5c",
+            grade="6a",
             color="blue",
             setter="Guillaume",
             set_on=set_on,
@@ -747,6 +744,27 @@ def voies_LP_petit_toit() -> List[Route]:
             grade="5a",
             color="orange",
             setter="Tomasz",
+            set_on=set_on,
+        ),
+        Route(
+            lane="20",
+            grade="5b",
+            color="green",
+            setter="Tomasz",
+            set_on=set_on,
+        ),
+        Route(
+            lane="21",
+            grade="6b",
+            color="white",
+            setter="Yann",
+            set_on=set_on,
+        ),
+        Route(
+            lane="21",
+            grade="5c",
+            color="yellow",
+            setter="Damien",
             set_on=set_on,
         ),
         Route(
@@ -771,12 +789,32 @@ def voies_LP_petit_toit() -> List[Route]:
             set_on=set_on,
         ),
         Route(
-            lane="22",
+            lane="23",
             grade="7b",
             color="pink",
             setter="Yann",
             set_on=set_on,
         ),
+        Route(
+            lane="23",
+            grade="7a",
+            color="red",
+            setter="Karla",
+            set_on=set_on,
+        ),
+        Route(
+            lane="23",
+            grade="5a",
+            color="white",
+            setter="Karla",
+            set_on=set_on,
+        ),
+    ]
+
+
+def voies_LP_DD() -> List[Route]:
+    set_on = datetime(2023, 3, 3)
+    return [
         Route(
             lane="24",
             grade="6c",
@@ -791,24 +829,11 @@ def voies_LP_petit_toit() -> List[Route]:
             setter="Katherine",
             set_on=set_on,
         ),
-    ]
-
-
-def voies_LP_DD() -> List[Route]:
-    set_on = datetime(2023, 3, 3)
-    return [
         Route(
-            lane="23",
-            grade="7a",
-            color="red",
-            setter="Karla",
-            set_on=set_on,
-        ),
-        Route(
-            lane="23",
-            grade="5a",
-            color="white",
-            setter="Karla",
+            lane="24",
+            grade="6a",
+            color="yellow",
+            setter="Guillaume",
             set_on=set_on,
         ),
         Route(
@@ -830,13 +855,6 @@ def voies_LP_DD() -> List[Route]:
             grade="7a",
             color="pink",
             setter="Damien",
-            set_on=set_on,
-        ),
-        Route(
-            lane="25",
-            grade="6a",
-            color="yellow",
-            setter="Guillaume",
             set_on=set_on,
         ),
         Route(
@@ -1717,3 +1735,41 @@ def voies_CN_vertical_droit() -> List[Route]:
             set_on=set_on,
         ),
     ]
+
+
+async def add_images_to_routes():
+    la_plaine = await Wall.find_one({"key": "laplaine"})
+    save_dir = pathlib.Path(f"{settings.ROUTE_IMG_DATA_DIR}/routes/")
+    save_dir.mkdir(exist_ok=True)
+
+    await add_image_to_route(la_plaine.id, "green", "12", "LP_12_13.jpg")
+    await add_image_to_route(la_plaine.id, "white", "13", "LP_12_13.jpg")
+    await add_image_to_route(la_plaine.id, "orange", "14", "LP_14.jpg")
+    await add_image_to_route(la_plaine.id, "blue", "14", "LP_15.jpg")
+    await add_image_to_route(la_plaine.id, "red", "15", "LP_14.jpg")
+    await add_image_to_route(la_plaine.id, "red", "15", "LP_14.jpg")
+    await add_image_to_route(la_plaine.id, "red", "20", "LP_21.jpg")
+    await add_image_to_route(la_plaine.id, "orange", "20", "LP_21.jpg")
+    await add_image_to_route(la_plaine.id, "yellow", "21", "LP_21.jpg")
+    await add_image_to_route(la_plaine.id, "white", "21", "LP_21.jpg")
+    await add_image_to_route(la_plaine.id, "green", "22", "LP_22.jpg")
+    await add_image_to_route(la_plaine.id, "blue", "22", "LP_22.jpg")
+    await add_image_to_route(la_plaine.id, "pink", "23", "LP_22.jpg")
+    await add_image_to_route(la_plaine.id, "white", "23", "LP_23.jpg")
+    await add_image_to_route(la_plaine.id, "red", "23", "LP_23.jpg")
+    await add_image_to_route(la_plaine.id, "orange", "24", "LP_24.jpg")
+    await add_image_to_route(la_plaine.id, "green", "24", "LP_24.jpg")
+    await add_image_to_route(la_plaine.id, "yellow", "24", "LP_24.jpg")
+
+
+async def add_image_to_route(
+    wall_id: PydanticObjectId, color: str, lane: str, file_name: str
+) -> None:
+    route = await Route.find_one(
+        Route.wall.id == wall_id, Route.color == color, Route.lane == lane
+    )
+    file_path = pathlib.Path(f"{settings.ROUTE_IMG_DATA_DIR}/routes/") / file_name
+    if not file_path.exists():
+        shutil.copyfile(str(pathlib.Path("fixture_data") / file_name), str(file_path))
+    route.img_path = file_path.relative_to(settings.ROUTE_IMG_DATA_DIR)
+    await route.save()

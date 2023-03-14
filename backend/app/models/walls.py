@@ -67,6 +67,7 @@ class RouteBase(Document):
     setter: str
     set_on: datetime
     removed_on: Optional[datetime]
+    img_path: Optional[str]
 
     class Settings:
         indexes = [

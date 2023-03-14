@@ -35,6 +35,8 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
 
+    ROUTE_IMG_DATA_DIR: str
+
     class Config:
         env_file = ".env.dev"
         # orm_mode = True

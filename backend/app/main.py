@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -21,6 +22,13 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+# Serve route images as static files
+app.mount(
+    f"{settings.API_V1_STR}/static",
+    StaticFiles(directory=settings.ROUTE_IMG_DATA_DIR),
+    name="static",
+)
 
 
 @app.on_event("startup")

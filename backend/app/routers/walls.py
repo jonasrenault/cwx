@@ -104,4 +104,6 @@ async def create_fixtures():
     for idx, r_func in enumerate(cn_routes):
         await create_routes(r_func(), croix_nivert, croix_nivert.areas[idx + 1])
 
+    await fixtures.add_images_to_routes()
+
     return [croix_nivert, la_plaine]

@@ -1,26 +1,33 @@
 import { useEffect, useState } from 'react'
+import { styled, useTheme } from '@mui/material/styles'
 import * as d3 from 'd3'
 import {
+  Box,
+  Stack,
   Card,
+  Grid,
   CardHeader,
   CardContent,
   CardActions,
   Collapse,
   Avatar,
   IconButton,
+  TextField,
 } from '@mui/material'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Route } from '../models/wall'
+import WallViewer from './WallViewer'
+import { Route, Wall } from '../models/wall'
 
 const API_URL = import.meta.env.VITE_BACKEND_API_URL
 
 interface RouteCardProps {
   route: Route
+  wall?: Wall
 }
 
-export function ZoomableImg({ image, width, height }) {
+export function ZoomableImg({ image }) {
   const handleZoom = (e) => {
     d3.select('svg.u-zoomable-img image').attr('transform', e.transform)
   }
@@ -29,8 +36,6 @@ export function ZoomableImg({ image, width, height }) {
     const img = new Image()
     img.src = image
     await img.decode()
-    console.log(img.naturalHeight)
-    console.log(img.naturalWidth)
 
     const svg = d3.select('svg.u-zoomable-img')
     svg.selectAll('image').remove()
@@ -39,7 +44,6 @@ export function ZoomableImg({ image, width, height }) {
     svg
       .attr('viewBox', `0 0 ${img.naturalWidth} ${img.naturalHeight}`)
       .attr('preserveAspectRatio', 'xMidYMid meet')
-      // .attr('height', '600px')
       .attr('width', '100%')
 
     const zoom = d3
@@ -60,9 +64,27 @@ export function ZoomableImg({ image, width, height }) {
   return <svg className='u-zoomable-img'></svg>
 }
 
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
+  const { expand, ...other } = props
+  return <IconButton {...other} />
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(-90deg)' : 'rotate(0deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.complex,
+  }),
+}))
+
 export default function RouteCard(props: RouteCardProps) {
-  const { route } = props
-  const [expanded, setExpanded] = useState(true)
+  const { route, wall } = props
+  const [expanded, setExpanded] = useState(false)
+  const theme = useTheme()
+
+  const selectedArea = wall?.areas?.filter((area) => area._id === route.area.id)[0]
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
@@ -84,11 +106,6 @@ export default function RouteCard(props: RouteCardProps) {
             {route.grade.split('').map((c) => (c === '+' ? <sup key={c}>+</sup> : c))}
           </Avatar>
         }
-        action={
-          <IconButton aria-label='show more' onClick={handleExpandClick}>
-            <ExpandMoreIcon />
-          </IconButton>
-        }
         title={route.setter}
         subheader={`Couloir ${route.lane}`}
       />
@@ -100,17 +117,58 @@ export default function RouteCard(props: RouteCardProps) {
         <IconButton aria-label='share'>
           <ShareIcon />
         </IconButton>
+        <ExpandMore
+          expand={expanded}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label='show more'
+        >
+          <ExpandMoreIcon />
+        </ExpandMore>
       </CardActions>
-      <Collapse in={expanded} timeout='auto' unmountOnExit>
-        <CardContent>
-          {route.img_path && (
-            <ZoomableImg
-              image={`${API_URL}static/${route.img_path}`}
-              alt={route.color + ' ' + route.lane}
-            />
-          )}
-        </CardContent>
-      </Collapse>
+      <CardContent>
+        <Collapse in={!expanded} timeout={theme.transitions.duration.complex} unmountOnExit>
+          <Grid container spacing={1}>
+            {wall && (
+              <Grid item sm={6}>
+                <Stack>
+                  <WallViewer wall={wall} selectedArea={selectedArea} disabled={true} />
+                  {selectedArea && (
+                    <Box sx={{ my: 1 }}>
+                      <TextField
+                        disabled
+                        label='Secteur'
+                        value={selectedArea.name}
+                        variant='standard'
+                        sx={{ width: 1.0 }}
+                      />
+                    </Box>
+                  )}
+                </Stack>
+              </Grid>
+            )}
+            {route.img_path && (
+              <Grid item sm={6} sx={{ maxHeight: '30vh' }}>
+                <div
+                  style={{
+                    backgroundImage: `url(${API_URL}static/${route.img_path})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '15px',
+                  }}
+                />
+              </Grid>
+            )}
+          </Grid>
+        </Collapse>
+        <Collapse in={expanded} timeout={theme.transitions.duration.complex} unmountOnExit>
+          <Box sx={{ borderRadius: '15px', overflow: 'hidden' }}>
+            {route.img_path && <ZoomableImg image={`${API_URL}static/${route.img_path}`} />}
+          </Box>
+        </Collapse>
+      </CardContent>
     </Card>
   )
 }

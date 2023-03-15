@@ -1,9 +1,13 @@
-svg .u-area:hover {
+svg .u-area:hover:not(.disabled) {
   opacity: 40%;
 }
 
 svg .u-area.selected {
   opacity: 40%;
+}
+
+svg .u-area.selected.disabled {
+  fill: grey;
 }
 
 svg .u-border {

@@ -39,6 +39,7 @@ interface WallViewProps {
   wall: Wall
   selectedArea?: Area
   onAreaSelected: (area: Area) => void
+  disabled?: boolean
 }
 
 export default function WallViewer(props: WallViewProps) {
@@ -71,11 +72,15 @@ export default function WallViewer(props: WallViewProps) {
       >
         {props.wall.areas?.map((area) => (
           <g
-            className={'u-area' + (props.selectedArea?._id === area._id ? ' selected' : '')}
+            className={
+              'u-area' +
+              (props.disabled ? ' disabled' : '') +
+              (props.selectedArea?._id === area._id ? ' selected' : '')
+            }
             key={area._id}
-            onMouseOver={() => handleMouseEnter(area)}
-            onMouseLeave={() => handleMouseLeave()}
-            onClick={() => props.onAreaSelected(area)}
+            onMouseOver={() => (props.disabled ? null : handleMouseEnter(area))}
+            onMouseLeave={() => (props.disabled ? null : handleMouseLeave())}
+            onClick={() => (props.disabled ? null : props.onAreaSelected(area))}
           >
             {area.paths.map((path) => (
               <path

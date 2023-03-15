@@ -1,8 +1,4 @@
-import { Container, Grid } from '@mui/material'
-import { useLoaderData, useRouteLoaderData, useParams } from 'react-router-dom'
-import { Wall } from '../models/wall'
-import WallCard from '../components/WallCard'
-import wallService from '../services/wall.service'
+import { useRouteLoaderData, useParams } from 'react-router-dom'
 import RouteCard from '../components/RouteCard'
 
 export default function RouteView() {
@@ -11,5 +7,5 @@ export default function RouteView() {
   const { routeId } = useParams()
   const route = wall.routes.filter((route) => route._id === routeId)[0]
 
-  return <RouteCard route={route}></RouteCard>
+  return <RouteCard route={route} wall={wall}></RouteCard>
 }

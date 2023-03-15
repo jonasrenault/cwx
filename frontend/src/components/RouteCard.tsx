@@ -1,14 +1,13 @@
-import * as React from 'react'
+import { useEffect, useState } from 'react'
+import * as d3 from 'd3'
 import {
   Card,
   CardHeader,
-  CardMedia,
   CardContent,
   CardActions,
   Collapse,
   Avatar,
   IconButton,
-  Typography,
 } from '@mui/material'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
@@ -21,9 +20,49 @@ interface RouteCardProps {
   route: Route
 }
 
+export function ZoomableImg({ image, width, height }) {
+  const handleZoom = (e) => {
+    d3.select('svg.u-zoomable-img image').attr('transform', e.transform)
+  }
+
+  const setupImage = async () => {
+    const img = new Image()
+    img.src = image
+    await img.decode()
+    console.log(img.naturalHeight)
+    console.log(img.naturalWidth)
+
+    const svg = d3.select('svg.u-zoomable-img')
+    svg.selectAll('image').remove()
+    svg.append('image').attr('href', image)
+
+    svg
+      .attr('viewBox', `0 0 ${img.naturalWidth} ${img.naturalHeight}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet')
+      // .attr('height', '600px')
+      .attr('width', '100%')
+
+    const zoom = d3
+      .zoom()
+      .on('zoom', handleZoom)
+      .scaleExtent([1, 5])
+      .translateExtent([
+        [0, 0],
+        [img.naturalWidth, img.naturalHeight],
+      ])
+    svg.call(zoom)
+  }
+
+  useEffect(() => {
+    setupImage()
+  }, [image])
+
+  return <svg className='u-zoomable-img'></svg>
+}
+
 export default function RouteCard(props: RouteCardProps) {
   const { route } = props
-  const [expanded, setExpanded] = React.useState(true)
+  const [expanded, setExpanded] = useState(true)
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
@@ -46,7 +85,7 @@ export default function RouteCard(props: RouteCardProps) {
           </Avatar>
         }
         action={
-          <IconButton aria-label='show more'>
+          <IconButton aria-label='show more' onClick={handleExpandClick}>
             <ExpandMoreIcon />
           </IconButton>
         }
@@ -63,40 +102,14 @@ export default function RouteCard(props: RouteCardProps) {
         </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout='auto' unmountOnExit>
-        {route.img_path && (
-          <CardMedia
-            component='img'
-            sx={{ objectFit: 'contain', height: 600 }}
-            image={`${API_URL}static/${route.img_path}`}
-            alt='Paella dish'
-          />
-        )}
-
-        {/* <CardContent>
-          <Typography paragraph>Method:</Typography>
-          <Typography paragraph>
-            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
-            minutes.
-          </Typography>
-          <Typography paragraph>
-            Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over medium-high
-            heat. Add chicken, shrimp and chorizo, and cook, stirring occasionally until lightly
-            browned, 6 to 8 minutes. Transfer shrimp to a large plate and set aside, leaving chicken
-            and chorizo in the pan. Add pimentón, bay leaves, garlic, tomatoes, onion, salt and
-            pepper, and cook, stirring often until thickened and fragrant, about 10 minutes. Add
-            saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-          </Typography>
-          <Typography paragraph>
-            Add rice and stir very gently to distribute. Top with artichokes and peppers, and cook
-            without stirring, until most of the liquid is absorbed, 15 to 18 minutes. Reduce heat to
-            medium-low, add reserved shrimp and mussels, tucking them down into the rice, and cook
-            again without stirring, until mussels have opened and rice is just tender, 5 to 7
-            minutes more. (Discard any mussels that don&apos;t open.)
-          </Typography>
-          <Typography>
-            Set aside off of the heat to let rest for 10 minutes, and then serve.
-          </Typography>
-        </CardContent> */}
+        <CardContent>
+          {route.img_path && (
+            <ZoomableImg
+              image={`${API_URL}static/${route.img_path}`}
+              alt={route.color + ' ' + route.lane}
+            />
+          )}
+        </CardContent>
       </Collapse>
     </Card>
   )

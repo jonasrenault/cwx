@@ -105,7 +105,8 @@ services:
     build:
       context: ./frontend
       args:
-        FRONTEND_ENV: ${FRONTEND_ENV-production}
+        - FRONTEND_ENV=${FRONTEND_ENV-production}
+        - VITE_BACKEND_API_URL
     env_file:
       - .env
     labels:

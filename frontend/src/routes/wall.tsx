@@ -1,6 +1,5 @@
 import { Container, Grid } from '@mui/material'
 import { useLoaderData, redirect, Outlet } from 'react-router-dom'
-import { Wall } from '../models/wall'
 import WallCard from '../components/WallCard'
 import wallService from '../services/wall.service'
 
@@ -14,7 +13,7 @@ export async function loader({ params }) {
 }
 
 export default function WallView() {
-  const { wall } = useLoaderData<Wall>()
+  const { wall } = useLoaderData()
   return (
     <Container component='main' sx={{ pt: 8, pb: 6 }}>
       <Grid container spacing={5}>

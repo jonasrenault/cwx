@@ -3,7 +3,7 @@ import axios from 'axios'
 const API_URL = import.meta.env.VITE_BACKEND_API_URL
 
 class AdminService {
-  async checkIsAdmin(): string {
+  async checkIsAdmin(): Promise<string> {
     const response = await axios.get(API_URL + 'admin/test-admin')
     return response.data
   }

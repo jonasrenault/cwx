@@ -57,9 +57,14 @@ export default function TopMenuBar() {
         )}
 
         {user !== undefined && user.is_superuser && (
-          <Button component={NavLink} to='/users' sx={{ color: '#fff' }}>
-            Users
-          </Button>
+          <>
+            <Button component={NavLink} to='/admin' sx={{ color: '#fff' }}>
+              Admin
+            </Button>
+            <Button component={NavLink} to='/users' sx={{ color: '#fff' }}>
+              Users
+            </Button>
+          </>
         )}
 
         {user !== undefined && (

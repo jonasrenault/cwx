@@ -20,7 +20,7 @@ export default function Home() {
       {/* Hero unit */}
       <Container disableGutters maxWidth='sm' component='main' sx={{ pt: 8, pb: 6 }}>
         <Typography component='h1' variant='h2' align='center' color='text.primary' gutterBottom>
-          Paris Wall eXplorer
+          Climbing Wall eXplorer
         </Typography>
       </Container>
 

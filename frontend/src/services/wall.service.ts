@@ -16,6 +16,11 @@ class WallService {
     return response.data
   }
 
+  /**
+   * Method currently unused as we always fetch routes when getting walls
+   * @param wallId
+   * @returns
+   */
   async getWallRoutes(wallId: string): Array<Route> {
     const response = await axios.get(API_URL + `walls/${wallId}/routes`)
     return response.data

@@ -33,7 +33,7 @@ async def get_walls(
 
 
 @router.get("/{id}", response_model=schemas.WallWithRoutes)
-async def get_walls(
+async def get_wall(
     id: PydanticObjectId,
     fetch_routes: bool = False,
 ):
@@ -71,7 +71,7 @@ async def create_routes(routes, wall, area) -> List[models.Route]:
 @router.post("", response_model=List[models.Wall])
 async def create_fixtures():
     """
-    Populate walls with fixture data
+    Populate DB with fixture data
     """
     await models.Route.find_all().delete()
     await models.Area.find_all().delete()

@@ -6,6 +6,8 @@ import { Profile } from './routes/profile'
 import Login from './routes/login'
 import Register from './routes/register'
 import Users, { loader as usersLoader } from './routes/users'
+import WallView, { loader as wallLoader } from './routes/wall'
+import RouteView from './routes/route'
 
 export const routes = [
   {
@@ -30,6 +32,18 @@ export const routes = [
         path: 'users',
         element: <Users />,
         loader: usersLoader,
+      },
+      {
+        path: 'wall/:wallId',
+        element: <WallView />,
+        id: 'wall',
+        loader: wallLoader,
+        children: [
+          {
+            path: ':routeId',
+            element: <RouteView />,
+          },
+        ],
       },
     ],
   },

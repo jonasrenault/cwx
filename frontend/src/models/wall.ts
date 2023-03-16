@@ -1,12 +1,15 @@
 export interface Wall {
-  id: string
+  _id: string
+  key: string
   name: string
   city: string
-  areas: Area[]
+  description: string
+  areas?: Area[]
   routes?: Route[]
 }
 
 export interface Area {
+  _id: string
   name: string
   paths: Array<Shape>
   border: [number, number][]
@@ -29,12 +32,15 @@ export interface Path extends Shape {
 }
 
 export interface Route {
-  id: string
+  _id: string
   grade: string
   color: string
   lane: string
-  area: string
+  area: Area
   setter: string
-  set: Date
-  removed: Date
+  set_on: Date
+  removed_on: Date
+  img_path?: string
+  area: Area
+  wall: Wall
 }

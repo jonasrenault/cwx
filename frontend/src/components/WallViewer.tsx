@@ -1,53 +1,9 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useState } from 'react'
 import { Box } from '@mui/material'
 import { path } from 'd3-path'
 import * as d3 from 'd3'
 import { Wall, Area } from '../models/wall'
 import './WallViewer.css'
-
-function drawWall(container, width: number, height: number, wall: Wall) {
-  const xValues = wall.areas.map((area) => area.border.map((border) => border[0])).flat(1)
-  const yValues = wall.areas.map((area) => area.border.map((border) => border[1])).flat(1)
-  const [xmin, xmax] = d3.extent(xValues)
-  const [ymin, ymax] = d3.extent(yValues)
-
-  const svg = d3
-    .select(container)
-    .select('svg')
-    .attr('viewBox', `${xmin} ${ymin} ${xmax - xmin} ${ymax - ymin}`)
-    .attr('preserveAspectRatio', 'xMidYMid meet')
-
-  const areas = svg
-    .selectAll('.u-area')
-    .data(wall.areas)
-    .join('g')
-    .classed('u-area', true)
-    .on('mouseover', function () {
-      const hovered = d3.select(this)
-      hovered.classed('active', true)
-      d3.select(container).select('svg').selectAll('.u-border').remove()
-      d3.select(container)
-        .select('svg')
-        .append('path')
-        .classed('u-border', true)
-        .style('fill', 'none')
-        .attr('d', drawBorder((hovered.datum() as Area).border).toString())
-    })
-    .on('mouseout', function () {
-      const hovered = d3.select(this)
-      hovered.classed('active', false)
-      d3.select(container).select('svg').selectAll('.u-border').remove()
-    })
-
-  areas
-    .selectAll('.u-path')
-    .data((d) => d.paths)
-    .join('path')
-    .classed('u-path', true)
-    .style('stroke', (d) => d.color)
-    .style('fill', (d) => d.color)
-    .attr('d', (d) => drawShape(d).toString())
-}
 
 function drawShape(el: Shape) {
   const context = path()
@@ -77,22 +33,70 @@ function drawBorder(border: [number, number][]) {
   return context
 }
 
-interface WallViewProps {
-  width: number
-  height: number
+interface WallViewerProps {
+  width?: number
+  height?: number
   wall: Wall
+  selectedArea?: Area
+  onAreaSelected: (area: Area) => void
+  disabled?: boolean
 }
 
-export default function WallViewer(props: WallViewProps) {
+export default function WallViewer(props: WallViewerProps) {
   const ref = useRef<HTMLElement>()
 
-  useEffect(() => {
-    drawWall(ref.current, props.width, props.height, props.wall)
-  })
+  // compute viewbox
+  const xValues = props.wall.areas.map((area) => area.border.map((border) => border[0])).flat(1)
+  const yValues = props.wall.areas.map((area) => area.border.map((border) => border[1])).flat(1)
+  const [xmin, xmax] = d3.extent(xValues)
+  const [ymin, ymax] = d3.extent(yValues)
+
+  const [highlightedArea, setHighlightedArea] = useState(null)
+
+  const handleMouseEnter = (area: Area) => {
+    setHighlightedArea(area)
+  }
+
+  const handleMouseLeave = () => {
+    setHighlightedArea(null)
+  }
 
   return (
     <Box ref={ref} sx={{ width: props.width, height: props.height }} className='svg-container'>
-      <svg className='u-wall' width={props.width} height={props.height} />
+      <svg
+        className='u-wall'
+        width={props.width}
+        height={props.height}
+        preserveAspectRatio='xMidYMid meet'
+        viewBox={`${xmin} ${ymin} ${xmax - xmin} ${ymax - ymin}`}
+      >
+        {props.wall.areas?.map((area) => (
+          <g
+            className={
+              'u-area' +
+              (props.disabled ? ' disabled' : '') +
+              (props.selectedArea?._id === area._id ? ' selected' : '')
+            }
+            key={area._id}
+            onMouseOver={() => (props.disabled ? null : handleMouseEnter(area))}
+            onMouseLeave={() => (props.disabled ? null : handleMouseLeave())}
+            onClick={() => (props.disabled ? null : props.onAreaSelected(area))}
+          >
+            {area.paths.map((path) => (
+              <path
+                key={drawShape(path).toString()}
+                className={'u-path'}
+                stroke={path.color}
+                fill={path.color}
+                d={drawShape(path).toString()}
+              ></path>
+            ))}
+          </g>
+        ))}
+        {highlightedArea && (
+          <path className='u-border' d={drawBorder(highlightedArea.border).toString()} />
+        )}
+      </svg>
     </Box>
   )
 }

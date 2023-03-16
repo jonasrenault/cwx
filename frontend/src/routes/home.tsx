@@ -1,12 +1,12 @@
-import { Container, Box, Typography, Grid, Card, CardHeader, CardContent } from '@mui/material'
+import { Container, Box, Typography, Grid } from '@mui/material'
 import { useLoaderData, redirect } from 'react-router-dom'
 import { Wall } from '../models/wall'
-import WallViewer from '../components/WallViewer'
+import WallCard from '../components/WallCard'
 import wallService from '../services/wall.service'
 
 export async function loader() {
   try {
-    const walls = await wallService.getWalls()
+    const walls = await wallService.getWalls(true)
     return { walls }
   } catch {
     return redirect('/')
@@ -26,30 +26,10 @@ export default function Home() {
 
       {/* End hero unit */}
       <Container maxWidth='md' component='main'>
-        <Grid container spacing={5} alignItems='flex-end'>
+        <Grid container spacing={5}>
           {walls.map((wall) => (
-            // Enterprise card is full width at sm breakpoint
-            <Grid item key={wall.key} xs={12} sm={6} md={6}>
-              <Card>
-                <CardHeader
-                  title={wall.name}
-                  subheader={wall.city}
-                  titleTypographyProps={{ align: 'center' }}
-                  subheaderTypographyProps={{
-                    align: 'center',
-                  }}
-                />
-                <CardContent>
-                  <Box>
-                    <WallViewer wall={wall} />
-                  </Box>
-                </CardContent>
-                {/* <CardActions>
-                  <Button fullWidth variant={tier.buttonVariant as 'outlined' | 'contained'}>
-                    {tier.buttonText}
-                  </Button>
-                </CardActions> */}
-              </Card>
+            <Grid item key={wall.key} xs={12} sm={12} md={6}>
+              <WallCard wall={wall} />
             </Grid>
           ))}
         </Grid>

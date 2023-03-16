@@ -33,7 +33,7 @@ function drawBorder(border: [number, number][]) {
   return context
 }
 
-interface WallViewProps {
+interface WallViewerProps {
   width?: number
   height?: number
   wall: Wall
@@ -42,7 +42,7 @@ interface WallViewProps {
   disabled?: boolean
 }
 
-export default function WallViewer(props: WallViewProps) {
+export default function WallViewer(props: WallViewerProps) {
   const ref = useRef<HTMLElement>()
 
   // compute viewbox

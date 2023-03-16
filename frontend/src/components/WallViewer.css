@@ -6,10 +6,6 @@ svg .u-area.selected {
   opacity: 40%;
 }
 
-svg .u-area.selected.disabled {
-  fill: grey;
-}
-
 svg .u-border {
   stroke: black;
   stroke-width: 2px;

@@ -1,10 +1,10 @@
-# PWX
+# CWX - Climbing Wall eXplorer
 
 [![Linting](https://github.com/jonasrenault/fastapi-react-mongodb-docker/actions/workflows/lint.yml/badge.svg)](https://github.com/jonasrenault/fastapi-react-mongodb-docker/actions/workflows/lint.yml)
 
 [![Tests](https://github.com/jonasrenault/fastapi-react-mongodb-docker/actions/workflows/test.yml/badge.svg)](https://github.com/jonasrenault/fastapi-react-mongodb-docker/actions/workflows/test.yml)
 
-Webapp for Paris Wall eXplorer.
+Webapp for Climbin Wall eXplorer.
 
 ## Project structure
 

@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "pwx"
+name = "cwx"
 version = "0.1.0"
-description = "Backend API for pwx"
+description = "Backend API for cwx"
 authors = ["Jonas Renault <jonasrenault@gmail.com>"]
 readme = "README.md"
 packages = [

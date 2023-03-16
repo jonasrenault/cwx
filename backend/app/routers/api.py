@@ -12,4 +12,4 @@ api_router.include_router(walls.router, prefix="/walls", tags=["walls"])
 
 @api_router.get("/")
 async def root():
-    return {"message": "Backend API for PWX operational !"}
+    return {"message": "Backend API for CWX operational !"}

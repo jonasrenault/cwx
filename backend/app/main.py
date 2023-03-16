@@ -1,13 +1,19 @@
+import logging
+
+from beanie import init_beanie
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from .routers.api import api_router
-from .config.config import settings
-from .models import User, Wall, Area, Route
 from .auth.auth import get_hashed_password
+from .config.config import settings
+from .config.logging import setup_loggers
+from .models import Area, Route, User, Wall
+from .routers.api import api_router
+
+setup_loggers()
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
@@ -24,11 +30,14 @@ if settings.BACKEND_CORS_ORIGINS:
     )
 
 # Serve route images as static files
-app.mount(
-    f"{settings.API_V1_STR}/static",
-    StaticFiles(directory=settings.ROUTE_IMG_DATA_DIR),
-    name="static",
-)
+try:
+    app.mount(
+        f"{settings.API_V1_STR}/static",
+        StaticFiles(directory=settings.ROUTE_IMG_DATA_DIR),
+        name="static",
+    )
+except RuntimeError as e:
+    logger.error(e)
 
 
 @app.on_event("startup")

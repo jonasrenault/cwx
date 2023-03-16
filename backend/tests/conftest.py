@@ -10,7 +10,7 @@ from app.main import app
 from app.config.config import settings
 from .utils import get_user_auth_headers
 
-MONGO_TEST_DB = "farmdtest"
+MONGO_TEST_DB = "pwxtest"
 
 
 @pytest.fixture

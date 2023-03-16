@@ -8,6 +8,7 @@ import Register from './routes/register'
 import Users, { loader as usersLoader } from './routes/users'
 import WallView, { loader as wallLoader } from './routes/wall'
 import RouteView from './routes/route'
+import Admin, { loader as adminLoader } from './routes/admin'
 
 export const routes = [
   {
@@ -44,6 +45,11 @@ export const routes = [
             element: <RouteView />,
           },
         ],
+      },
+      {
+        path: 'admin',
+        element: <Admin />,
+        loader: adminLoader,
       },
     ],
   },

@@ -77,12 +77,17 @@ services:
     environment:
       - SERVER_NAME=${DOMAIN?Variable not set}
       - SERVER_HOST=https://${DOMAIN?Variable not set}
+    volumes:
+      - app-static-data:/app/static
     build:
       context: ./backend
       dockerfile: Dockerfile
       args:
         INSTALL_DEV: ${INSTALL_DEV-false}
     deploy:
+      placement:
+        constraints:
+          - node.labels.${STACK_NAME?Variable not set}.app-static-data == true
       labels:
         - traefik.enable=true
         - traefik.constraint-label-stack=${TRAEFIK_TAG?Variable not set}
@@ -123,6 +128,7 @@ services:
 
 volumes:
   app-db-data:
+  app-static-data:
 
 networks:
   traefik-public:

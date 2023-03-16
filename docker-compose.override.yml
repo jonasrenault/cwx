@@ -40,7 +40,6 @@ services:
       dockerfile: Dockerfile
       args:
         INSTALL_DEV: ${INSTALL_DEV-true}
-    # command: bash -c "while true; do sleep 1; done"  # Infinite loop to keep container live doing nothing
     command: /start-reload.sh
     labels:
       - traefik.enable=true

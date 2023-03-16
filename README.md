@@ -4,7 +4,7 @@
 
 [![Tests](https://github.com/jonasrenault/fastapi-react-mongodb-docker/actions/workflows/test.yml/badge.svg)](https://github.com/jonasrenault/fastapi-react-mongodb-docker/actions/workflows/test.yml)
 
-Webapp for Climbin Wall eXplorer.
+Webapp for Climbing Wall eXplorer.
 
 ## Project structure
 

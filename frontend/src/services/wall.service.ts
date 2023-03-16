@@ -12,7 +12,7 @@ class WallService {
 
   async getWall(wallId: string, fetchRoutes = false): Wall {
     const options = fetchRoutes ? { params: { fetch_routes: 1 } } : {}
-    const response = await axios.get(API_URL + `walls/${wallId}/`, options)
+    const response = await axios.get(API_URL + `walls/${wallId}`, options)
     return response.data
   }
 

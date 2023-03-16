@@ -1,8 +1,8 @@
 # CWX - Climbing Wall eXplorer
 
-[![Linting](https://github.com/jonasrenault/fastapi-react-mongodb-docker/actions/workflows/lint.yml/badge.svg)](https://github.com/jonasrenault/fastapi-react-mongodb-docker/actions/workflows/lint.yml)
+[![Linting](https://github.com/jonasrenault/cwx/actions/workflows/lint.yml/badge.svg)](https://github.com/jonasrenault/cwx/actions/workflows/lint.yml)
 
-[![Tests](https://github.com/jonasrenault/fastapi-react-mongodb-docker/actions/workflows/test.yml/badge.svg)](https://github.com/jonasrenault/fastapi-react-mongodb-docker/actions/workflows/test.yml)
+[![Tests](https://github.com/jonasrenault/cwx/actions/workflows/test.yml/badge.svg)](https://github.com/jonasrenault/cwx/actions/workflows/test.yml)
 
 Webapp for Climbing Wall eXplorer.
 

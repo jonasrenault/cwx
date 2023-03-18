@@ -77,7 +77,11 @@ export default function TopMenuBar() {
               aria-haspopup='true'
               aria-expanded={open ? 'true' : undefined}
             >
-              <Avatar sx={{ width: 32, height: 32 }}>
+              <Avatar
+                sx={{ width: 32, height: 32 }}
+                alt={user.first_name + ' ' + user.last_name}
+                src={user.picture && user.picture}
+              >
                 {user && user.first_name ? user.first_name[0] : 'P'}
               </Avatar>
             </IconButton>
@@ -121,7 +125,11 @@ export default function TopMenuBar() {
       >
         <Link component={NavLink} to='/profile' color='inherit' underline='none'>
           <MenuItem onClick={handleClose}>
-            <Avatar /> Profile
+            <Avatar
+              alt={user && user.first_name + ' ' + user.last_name}
+              src={user && user.picture && user.picture}
+            />{' '}
+            Profile
           </MenuItem>
         </Link>
 

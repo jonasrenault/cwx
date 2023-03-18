@@ -37,6 +37,12 @@ class Settings(BaseSettings):
 
     ROUTE_IMG_DATA_DIR: str
 
+    # SSO ID and Secrets
+    GOOGLE_CLIENT_ID: str = None
+    GOOGLE_CLIENT_SECRET: str = None
+    GOOGLE_CALLBACK_HOSTNAME: str = None
+    GOOGLE_LOGIN_CALLBACK_URL: str = None
+
     class Config:
         env_file = ".env.dev"
         # orm_mode = True

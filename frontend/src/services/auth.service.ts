@@ -23,8 +23,20 @@ class AuthService {
     return response.data
   }
 
+  async refreshToken() {
+    const response = await axios.get(API_URL + 'login/refresh-token', { withCredentials: true })
+    if (response.data.access_token) {
+      localStorage.setItem('token', response.data.access_token)
+    }
+    return response.data
+  }
+
   logout() {
     localStorage.removeItem('token')
+  }
+
+  getGoogleLoginUrl() {
+    return API_URL + 'login/google'
   }
 }
 

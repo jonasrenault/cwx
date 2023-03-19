@@ -105,6 +105,8 @@ services:
       args:
         - FRONTEND_ENV=${FRONTEND_ENV-production}
         - VITE_BACKEND_API_URL
+        - VITE_GA_TRACKING_ID
+        - VITE_PWD_SIGNUP_ENABLED
     env_file:
       - .env
     labels:

@@ -96,22 +96,22 @@ function setupForUser() {
 
 it('should render an update button', () => {
   const { getByRole } = setupForUser()
-  expect(getByRole('button')).toHaveTextContent(/Update/i)
+  expect(getByRole('button', { name: 'Sauvegarder' })).toHaveTextContent(/Sauvegarder/i)
 })
 
 it('should render default values of profile', () => {
   const { getByLabelText, profile } = setupForUser()
-  expect(getByLabelText(/Email Address/i)).toHaveValue(profile.email)
+  expect(getByLabelText(/Adresse mail/i)).toHaveValue(profile.email)
 })
 
 it('should display required helper text', async () => {
   const { getByRole, getByText, user, getByLabelText } = setupForUser()
-  await user.clear(getByLabelText(/Email Address/i))
+  await user.clear(getByLabelText(/Adresse mail/i))
 
-  const updateBtn = getByRole('button')
+  const updateBtn = getByRole('button', { name: 'Sauvegarder' })
   await user.click(updateBtn)
 
-  expect(getByText(/Please provide an email./i)).toBeVisible()
+  expect(getByText(/Une adresse mail est nécessaire./i)).toBeVisible()
 })
 
 it('should display is_active and is_superuser if admin', async () => {
@@ -125,10 +125,10 @@ it('should display is_active and is_superuser if admin', async () => {
 it('should update user profile', async () => {
   const { getByRole, user } = setupForUser()
 
-  const updateBtn = getByRole('button')
+  const updateBtn = getByRole('button', { name: 'Sauvegarder' })
   await user.click(updateBtn)
 
-  expect(getByRole('alert')).toHaveTextContent('User profile updated successfully.')
+  expect(getByRole('alert')).toHaveTextContent('Votre profil a été mis à jour.')
 })
 
 it('should update other user profile', async () => {
@@ -140,10 +140,10 @@ it('should update other user profile', async () => {
     }),
   )
 
-  const updateBtn = getByRole('button')
+  const updateBtn = getByRole('button', { name: 'Sauvegarder' })
   await user.click(updateBtn)
 
-  expect(getByRole('alert')).toHaveTextContent('User profile updated successfully.')
+  expect(getByRole('alert')).toHaveTextContent('Le profil utilisateur a été mis à jour.')
 })
 
 it('should call onUpdate', async () => {
@@ -158,7 +158,7 @@ it('should call onUpdate', async () => {
     }),
   )
 
-  const updateBtn = getByRole('button')
+  const updateBtn = getByRole('button', { name: 'Sauvegarder' })
   await user.click(updateBtn)
 
   expect(handleUpdate).toHaveBeenCalledWith(updatedProfile)
@@ -174,7 +174,7 @@ it('should handle server errors', async () => {
     }),
   )
 
-  const updateBtn = getByRole('button')
+  const updateBtn = getByRole('button', { name: 'Sauvegarder' })
   await user.click(updateBtn)
 
   expect(getByRole('alert')).toHaveTextContent(error)

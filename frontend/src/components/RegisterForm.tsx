@@ -86,7 +86,7 @@ export default function RegisterForm() {
           </Button>
         )}
 
-        <Collapse in={expanded} timeout='auto' unmountOnExit>
+        <Collapse in={expanded} timeout='auto'>
           <Box component='form' onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>

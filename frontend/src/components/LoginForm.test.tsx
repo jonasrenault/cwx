@@ -44,8 +44,8 @@ function setup() {
       </SnackBarProvider>
     </AuthProvider>,
   )
-  const setEmailInput = (value) => user.type(utils.getByLabelText(/Email Address/i), value)
-  const setPasswordInput = (value) => user.type(utils.getByLabelText(/Password/i), value)
+  const setEmailInput = (value) => user.type(utils.getByLabelText(/Adresse mail/i), value)
+  const setPasswordInput = (value) => user.type(utils.getByLabelText(/Mot de passe/i), value)
   return {
     ...utils,
     user,
@@ -54,26 +54,33 @@ function setup() {
   }
 }
 
-it('should render a sign in button', () => {
-  const { getByRole } = setup()
-  expect(getByRole('button')).toHaveTextContent(/Sign In/i)
+it('should render a sign in button', async () => {
+  const { getByRole, user } = setup()
+  const registerByMailBtn = getByRole('button', { name: 'Connexion avec adresse mail' })
+  await user.click(registerByMailBtn)
+  expect(getByRole('button', { name: 'Connexion' })).toHaveTextContent(/Connexion/i)
 })
 
 it('should display required helper text', async () => {
   const { getByRole, getByText, user } = setup()
-  const loginBtn = getByRole('button')
+  const registerByMailBtn = getByRole('button', { name: 'Connexion avec adresse mail' })
+  await user.click(registerByMailBtn)
 
+  const loginBtn = getByRole('button', { name: 'Connexion' })
   await user.click(loginBtn)
 
-  expect(getByText(/Please provide an email./i)).toBeVisible()
-  expect(getByText(/Please provide a password./i)).toBeVisible()
+  expect(getByText(/Une adresse mail est nécessaire./i)).toBeVisible()
+  expect(getByText(/Un mot de passe est nécessaire./i)).toBeVisible()
 })
 
 it('should login user', async () => {
   const { getByRole, user, setEmailInput, setPasswordInput } = setup()
+  const registerByMailBtn = getByRole('button', { name: 'Connexion avec adresse mail' })
+  await user.click(registerByMailBtn)
+
   await setEmailInput('john@example.com')
   await setPasswordInput('johnjohn')
-  const loginBtn = getByRole('button')
+  const loginBtn = getByRole('button', { name: 'Connexion' })
 
   server.use(
     rest.get(API_URL + 'users/me', (req, res, ctx) => {
@@ -90,15 +97,17 @@ it('should login user', async () => {
 
   await user.click(loginBtn)
 
-  expect(getByRole('alert')).toHaveTextContent('Login successful.')
+  expect(getByRole('alert')).toHaveTextContent('Connexion réussie.')
   expect(localStorage.getItem('token')).toEqual(ACCESS_TOKEN)
 })
 
 it('should handle server errors', async () => {
   const { getByRole, user, setEmailInput, setPasswordInput } = setup()
+  const registerByMailBtn = getByRole('button', { name: 'Connexion avec adresse mail' })
+  await user.click(registerByMailBtn)
   await setEmailInput('john@example.com')
   await setPasswordInput('johnjohn')
-  const loginBtn = getByRole('button')
+  const loginBtn = getByRole('button', { name: 'Connexion' })
 
   const error = 'Incorrect email or password'
   server.use(

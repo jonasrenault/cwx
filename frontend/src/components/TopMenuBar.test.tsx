@@ -80,16 +80,16 @@ function setupLogged() {
 
 it('should render login and register buttons', () => {
   const { getByText } = setup()
-  expect(getByText(/Login/i)).toBeInTheDocument()
-  expect(getByText(/Register/i)).toBeInTheDocument()
+  expect(getByText(/Connexion/i)).toBeInTheDocument()
+  expect(getByText(/Inscription/i)).toBeInTheDocument()
 })
 
 it('should render profile menu when logged in', async () => {
   const { queryByText, getByLabelText } = setupLogged()
   await waitFor(() => {
     expect(getByLabelText(/Account settings/i)).toBeInTheDocument()
-    expect(queryByText(/Login/i)).not.toBeInTheDocument()
-    expect(queryByText(/Register/i)).not.toBeInTheDocument()
+    expect(queryByText(/Connexion/i)).not.toBeInTheDocument()
+    expect(queryByText(/Inscription/i)).not.toBeInTheDocument()
   })
 })
 
@@ -103,9 +103,9 @@ it('should show profile menu when clicked', async () => {
   await user.click(menuBtn)
 
   const menuItems = await findAllByRole('menuitem')
-  expect(menuItems).toHaveLength(4)
-  expect(menuItems[0]).toHaveTextContent(/Profile/i)
-  expect(menuItems[3]).toHaveTextContent(/Logout/i)
+  expect(menuItems).toHaveLength(2)
+  expect(menuItems[0]).toHaveTextContent(/Profil/i)
+  expect(menuItems[1]).toHaveTextContent(/Déconnexion/i)
 })
 
 it('should show users menu for admins', async () => {
@@ -128,14 +128,14 @@ it('should show users menu for admins', async () => {
 
 it('should navigate to login', async () => {
   const { getByText, user, router } = setup()
-  const loginBtn = getByText(/Login/i)
+  const loginBtn = getByText(/Connexion/i)
   await user.click(loginBtn)
   expect(router.state.location.pathname).toEqual('/login')
 })
 
 it('should navigate to register', async () => {
   const { getByText, user, router } = setup()
-  const registerBtn = getByText(/Register/i)
+  const registerBtn = getByText(/Inscription/i)
   await user.click(registerBtn)
   expect(router.state.location.pathname).toEqual('/register')
 })
@@ -149,7 +149,7 @@ it('should logout', async () => {
   await user.click(menuBtn)
 
   localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9')
-  const logoutBtn = getByText(/Logout/i)
+  const logoutBtn = getByText(/Déconnexion/i)
   await user.click(logoutBtn)
 
   expect(localStorage.getItem('token')).toBeNull()

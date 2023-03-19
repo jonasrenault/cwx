@@ -28,6 +28,11 @@ class UserService {
     const response = await axios.delete(API_URL + `users/${userId}`)
     return response.data
   }
+
+  async deleteSelf() {
+    const response = await axios.delete(API_URL + 'users/me')
+    return response.data
+  }
 }
 
 export default new UserService()

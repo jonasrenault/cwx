@@ -14,6 +14,7 @@ from starlette.responses import RedirectResponse
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_sso.sso.google import GoogleSSO
+from fastapi_sso.sso.facebook import FacebookSSO
 
 router = APIRouter()
 
@@ -21,10 +22,21 @@ google_sso = (
     GoogleSSO(
         settings.GOOGLE_CLIENT_ID,
         settings.GOOGLE_CLIENT_SECRET,
-        f"{settings.GOOGLE_CALLBACK_HOSTNAME}{settings.API_V1_STR}/login/google/callback",
+        f"{settings.SSO_CALLBACK_HOSTNAME}{settings.API_V1_STR}/login/google/callback",
     )
     if settings.GOOGLE_CLIENT_ID is not None
     and settings.GOOGLE_CLIENT_SECRET is not None
+    else None
+)
+
+facebook_sso = (
+    FacebookSSO(
+        settings.FACEBOOK_CLIENT_ID,
+        settings.FACEBOOK_CLIENT_SECRET,
+        f"{settings.SSO_CALLBACK_HOSTNAME}{settings.API_V1_STR}/login/facebook/callback",
+    )
+    if settings.FACEBOOK_CLIENT_ID is not None
+    and settings.FACEBOOK_CLIENT_SECRET is not None
     else None
 )
 
@@ -109,7 +121,7 @@ async def google_callback(request: Request):
     # Login user by creating access_token
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(user.uuid, expires_delta=access_token_expires)
-    response = RedirectResponse(settings.GOOGLE_LOGIN_CALLBACK_URL)
+    response = RedirectResponse(settings.SSO_LOGIN_CALLBACK_URL)
     response.set_cookie(
         "Authorization",
         value=f"Bearer {access_token}",

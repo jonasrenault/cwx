@@ -1,4 +1,15 @@
-import { Box, Avatar, Typography, Button, TextField, Link, Grid, SvgIcon } from '@mui/material'
+import { useState } from 'react'
+import {
+  Box,
+  Avatar,
+  Typography,
+  Button,
+  TextField,
+  Link,
+  Grid,
+  SvgIcon,
+  Collapse,
+} from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
@@ -6,7 +17,9 @@ import { useSnackBar } from '../contexts/snackbar'
 import { useAuth } from '../contexts/auth'
 import authService from '../services/auth.service'
 
-function GoogleIcon(props) {
+const SHOW_EMAIL_REGISTER_FORM: string = import.meta.env.VITE_PWD_SIGNUP_ENABLED
+
+export function GoogleIcon(props) {
   return (
     <SvgIcon {...props} viewBox='0 0 48 48'>
       <path
@@ -29,7 +42,7 @@ function GoogleIcon(props) {
   )
 }
 
-function FacebookIcon(props) {
+export function FacebookIcon(props) {
   return (
     <SvgIcon {...props} viewBox='0 0 48 48'>
       <linearGradient
@@ -64,6 +77,11 @@ export default function LoginForm() {
   const navigate = useNavigate()
   const { showSnackBar } = useSnackBar()
   const { login } = useAuth()
+  const [expanded, setExpanded] = useState(false)
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded)
+  }
 
   const onSubmit = async (data) => {
     try {
@@ -71,7 +89,7 @@ export default function LoginForm() {
       formData.append('username', data.email)
       formData.append('password', data.password)
       await login(formData)
-      showSnackBar('Login successful.', 'success')
+      showSnackBar('Connexion réussie.', 'success')
       navigate('/')
     } catch (error) {
       const msg =
@@ -84,6 +102,10 @@ export default function LoginForm() {
 
   const handleGoogleLogin = async () => {
     window.location.href = authService.getGoogleLoginUrl()
+  }
+
+  const handleFacebookLogin = async () => {
+    window.location.href = authService.getFacebookLoginUrl()
   }
 
   return (
@@ -99,7 +121,7 @@ export default function LoginForm() {
         <LockOutlinedIcon />
       </Avatar>
       <Typography component='h1' variant='h5'>
-        Sign in
+        Connexion
       </Typography>
       <Button
         variant='outlined'
@@ -107,54 +129,63 @@ export default function LoginForm() {
         sx={{ width: 1.0, mt: 2 }}
         onClick={handleGoogleLogin}
       >
-        Sign in with Google
+        Connexion avec Google
       </Button>
-      <Button
+      {/* <Button
         variant='outlined'
         startIcon={<FacebookIcon />}
         sx={{ width: 1.0, mt: 2 }}
-        onClick={handleGoogleLogin}
+        onClick={handleFacebookLogin}
       >
-        Sign in with Facebook
-      </Button>
-      <Box component='form' onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }} noValidate>
-        <TextField
-          margin='normal'
-          required
-          fullWidth
-          id='email'
-          label='Email Address'
-          name='email'
-          autoComplete='email'
-          autoFocus
-          error={!!errors.email}
-          helperText={errors.email && 'Please provide an email.'}
-          {...register('email', { required: true })}
-        />
-        <TextField
-          margin='normal'
-          required
-          fullWidth
-          name='password'
-          label='Password'
-          type='password'
-          id='password'
-          autoComplete='current-password'
-          error={!!errors.password}
-          helperText={errors.password && 'Please provide a password.'}
-          {...register('password', { required: true })}
-        />
-        <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-          Sign In
+        Connexion avec Facebook
+      </Button> */}
+
+      {SHOW_EMAIL_REGISTER_FORM && SHOW_EMAIL_REGISTER_FORM.toLowerCase() === 'true' && (
+        <Button variant='outlined' sx={{ width: 1.0, mt: 2 }} onClick={handleExpandClick}>
+          Connexion avec adresse mail
         </Button>
-        <Grid container justifyContent='flex-end'>
-          <Grid item>
-            <Link component={RouterLink} to='/register' variant='body2'>
-              {"Don't have an account? Sign Up"}
-            </Link>
+      )}
+
+      <Collapse in={expanded} timeout='auto' unmountOnExit>
+        <Box component='form' onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }} noValidate>
+          <TextField
+            margin='normal'
+            required
+            fullWidth
+            id='email'
+            label='Adresse mail'
+            name='email'
+            autoComplete='email'
+            autoFocus
+            error={!!errors.email}
+            helperText={errors.email && 'Une adresse mail est nécessaire.'}
+            {...register('email', { required: true })}
+          />
+          <TextField
+            margin='normal'
+            required
+            fullWidth
+            name='password'
+            label='Mot de passe'
+            type='password'
+            id='password'
+            autoComplete='current-password'
+            error={!!errors.password}
+            helperText={errors.password && 'Un mot de passe est nécessaire.'}
+            {...register('password', { required: true })}
+          />
+          <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+            Connexion
+          </Button>
+          <Grid container justifyContent='flex-end'>
+            <Grid item>
+              <Link component={RouterLink} to='/register' variant='body2'>
+                {'Pas encore de compte ? Inscris-toi'}
+              </Link>
+            </Grid>
           </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      </Collapse>
     </Box>
   )
 }

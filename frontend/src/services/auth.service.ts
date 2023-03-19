@@ -38,6 +38,10 @@ class AuthService {
   getGoogleLoginUrl() {
     return API_URL + 'login/google'
   }
+
+  getFacebookLoginUrl() {
+    return API_URL + 'login/facebook'
+  }
 }
 
 export default new AuthService()

@@ -40,8 +40,10 @@ class Settings(BaseSettings):
     # SSO ID and Secrets
     GOOGLE_CLIENT_ID: str = None
     GOOGLE_CLIENT_SECRET: str = None
-    GOOGLE_CALLBACK_HOSTNAME: str = None
-    GOOGLE_LOGIN_CALLBACK_URL: str = None
+    FACEBOOK_CLIENT_ID: str = None
+    FACEBOOK_CLIENT_SECRET: str = None
+    SSO_CALLBACK_HOSTNAME: str = None
+    SSO_LOGIN_CALLBACK_URL: str = None
 
     class Config:
         env_file = ".env.dev"

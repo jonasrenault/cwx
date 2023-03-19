@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   Checkbox,
@@ -8,6 +9,7 @@ import {
   DialogContentText,
   FormControlLabel,
   Grid,
+  IconButton,
   TextField,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
@@ -92,6 +94,15 @@ export default function UserProfile(props: UserProfileProps) {
           alignItems: 'center',
         }}
       >
+        <IconButton aria-label='upload picture' component='label' sx={{ mt: 1 }}>
+          <input hidden accept='image/*' type='file' />
+          <Avatar
+            sx={{ width: 56, height: 56 }}
+            alt={userProfile.first_name + ' ' + userProfile.last_name}
+            src={userProfile.picture && userProfile.picture}
+          />
+        </IconButton>
+
         <Box
           component='form'
           onSubmit={handleSubmit(onSubmit)}

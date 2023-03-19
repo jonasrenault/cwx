@@ -11,6 +11,8 @@ class UserBase(BaseModel):
     is_superuser: bool = False
     first_name: Optional[str] = None
     last_name: Optional[str] = None
+    provider: Optional[str] = None
+    picture: Optional[str] = None
 
 
 # Properties to receive via API on creation

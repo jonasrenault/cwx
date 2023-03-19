@@ -156,7 +156,7 @@ it('should delete user from the list', async () => {
   // select user 2. Expect his profile to be displayed
   await user.click(userBtn)
   await waitFor(() => {
-    expect(getByLabelText(/Email Address/i)).toHaveValue(users[2].email)
+    expect(getByLabelText(/Adresse mail/i)).toHaveValue(users[2].email)
   })
 
   // click on delete button. Expect confirmation modal to be shown
@@ -175,7 +175,7 @@ it('should delete user from the list', async () => {
   })
   expect(getAllByRole('listitem')).toHaveLength(2)
   expect(queryByTestId(users[2].uuid)).not.toBeInTheDocument()
-  expect(queryByLabelText(/Email Address/i)).not.toBeInTheDocument()
+  expect(queryByLabelText(/Adresse mail/i)).not.toBeInTheDocument()
 })
 
 it('should display profile info when user selected', async () => {
@@ -187,7 +187,7 @@ it('should display profile info when user selected', async () => {
   for (let idx = 0; idx < users.length; idx++) {
     await user.click(getByTestId(users[idx].uuid))
     await waitFor(() => {
-      expect(getByLabelText(/Email Address/i)).toHaveValue(users[idx].email)
+      expect(getByLabelText(/Adresse mail/i)).toHaveValue(users[idx].email)
     })
   }
 })
@@ -213,16 +213,16 @@ it('should update user info in the user list', async () => {
 
   // select user 2
   await user.click(getByTestId(users[2].uuid))
-  await waitFor(() => expect(getByLabelText(/First Name/i)).toHaveValue(users[2].first_name))
+  await waitFor(() => expect(getByLabelText(/Prénom/i)).toHaveValue(users[2].first_name))
 
   // update its first and last name
-  await user.type(getByLabelText(/First Name/i), 'Brad')
-  await user.type(getByLabelText(/Last Name/i), 'Pitt')
+  await user.type(getByLabelText(/Prénom/), 'Brad')
+  await user.type(getByLabelText(/Nom/), 'Pitt')
   const profileform = getByTestId('user-profile-form')
   fireEvent.submit(profileform)
 
   await waitFor(() => {
-    expect(queryByRole('alert')).toHaveTextContent('User profile updated successfully.')
+    expect(queryByRole('alert')).toHaveTextContent('Le profil utilisateur a été mis à jour.')
     expect(getByTestId(users[2].uuid)).toHaveTextContent('Brad Pitt')
   })
 })

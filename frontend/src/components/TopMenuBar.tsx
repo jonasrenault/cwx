@@ -14,7 +14,7 @@ import {
   Button,
   Box,
 } from '@mui/material'
-import { PersonAdd, Settings, Logout } from '@mui/icons-material'
+import { Logout } from '@mui/icons-material'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/auth'
 
@@ -48,10 +48,10 @@ export default function TopMenuBar() {
         {user === undefined && (
           <Box aria-label='button group'>
             <Button component={NavLink} to='/login' sx={{ color: '#fff' }}>
-              Login
+              Connexion
             </Button>
             <Button component={NavLink} to='/register' sx={{ color: '#fff' }}>
-              Register
+              Inscription
             </Button>
           </Box>
         )}
@@ -77,7 +77,11 @@ export default function TopMenuBar() {
               aria-haspopup='true'
               aria-expanded={open ? 'true' : undefined}
             >
-              <Avatar sx={{ width: 32, height: 32 }}>
+              <Avatar
+                sx={{ width: 32, height: 32 }}
+                alt={user.first_name + ' ' + user.last_name}
+                src={user.picture && user.picture}
+              >
                 {user && user.first_name ? user.first_name[0] : 'P'}
               </Avatar>
             </IconButton>
@@ -121,12 +125,16 @@ export default function TopMenuBar() {
       >
         <Link component={NavLink} to='/profile' color='inherit' underline='none'>
           <MenuItem onClick={handleClose}>
-            <Avatar /> Profile
+            <Avatar
+              alt={user && user.first_name + ' ' + user.last_name}
+              src={user && user.picture && user.picture}
+            />{' '}
+            Profil
           </MenuItem>
         </Link>
 
         <Divider />
-        <MenuItem onClick={handleClose} disabled={true}>
+        {/* <MenuItem onClick={handleClose} disabled={true}>
           <ListItemIcon>
             <PersonAdd fontSize='small' />
           </ListItemIcon>
@@ -137,12 +145,12 @@ export default function TopMenuBar() {
             <Settings fontSize='small' />
           </ListItemIcon>
           Settings
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize='small' />
           </ListItemIcon>
-          Logout
+          Déconnexion
         </MenuItem>
       </Menu>
     </AppBar>

@@ -22,6 +22,7 @@ import { useSnackBar } from '../contexts/snackbar'
 import UserProfile from '../components/UserProfile'
 import userService from '../services/user.service'
 import { useAuth } from '../contexts/auth'
+import { User } from '../models/user'
 
 export async function loader() {
   try {
@@ -94,7 +95,10 @@ export default function Users() {
                       data-testid={user.uuid}
                     >
                       <ListItemAvatar>
-                        <Avatar />
+                        <Avatar
+                          alt={user.first_name + ' ' + user.last_name}
+                          src={user.picture && user.picture}
+                        />
                       </ListItemAvatar>
                       <ListItemText
                         primary={user.email}

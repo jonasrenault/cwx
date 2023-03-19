@@ -1,7 +1,6 @@
 from typing import Optional
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import EmailStr, Field
 from beanie import Document, Indexed
-from datetime import datetime
 from uuid import UUID, uuid4
 
 
@@ -10,6 +9,8 @@ class User(Document):
     email: Indexed(EmailStr, unique=True)
     first_name: Optional[str] = None
     last_name: Optional[str] = None
-    hashed_password: str
+    hashed_password: Optional[str] = None
+    provider: Optional[str] = None
+    picture: Optional[str] = None
     is_active: bool = True
     is_superuser: bool = False

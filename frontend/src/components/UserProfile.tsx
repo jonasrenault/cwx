@@ -1,12 +1,29 @@
+import {
+  Avatar,
+  Box,
+  Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  TextField,
+} from '@mui/material'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Button, TextField, Grid, Box, FormControlLabel, Checkbox } from '@mui/material'
-import { useSnackBar } from '../contexts/snackbar'
+import { useNavigate } from 'react-router-dom'
 import { useAuth, User } from '../contexts/auth'
+import { useSnackBar } from '../contexts/snackbar'
 import userService from '../services/user.service'
-import { useEffect } from 'react'
+import { GoogleIcon } from './LoginForm'
 
 interface UserProfileProps {
   userProfile: User
+  onUserUpdated: (user: User) => void
+  allowDelete: boolean
 }
 
 export default function UserProfile(props: UserProfileProps) {
@@ -19,8 +36,10 @@ export default function UserProfile(props: UserProfileProps) {
   } = useForm<User>({
     defaultValues: userProfile,
   })
-  const { user: currentUser, setUser } = useAuth()
+  const navigate = useNavigate()
+  const { user: currentUser, setUser, logout } = useAuth()
   const { showSnackBar } = useSnackBar()
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     reset(userProfile)
@@ -33,11 +52,11 @@ export default function UserProfile(props: UserProfileProps) {
         // Updating user profile.
         updatedUser = await userService.updateProfile(data)
         setUser(updatedUser)
-        showSnackBar('User profile updated successfully.', 'success')
+        showSnackBar('Votre profil a été mis à jour.', 'success')
       } else {
         // Updating user different from current user.
         updatedUser = await userService.updateUser(userProfile.uuid, data)
-        showSnackBar('User profile updated successfully.', 'success')
+        showSnackBar('Le profil utilisateur a été mis à jour.', 'success')
       }
     } catch (error) {
       const msg =
@@ -52,6 +71,20 @@ export default function UserProfile(props: UserProfileProps) {
     }
   }
 
+  const handleDeleteProfile = async () => {
+    setOpen(true)
+  }
+
+  const handleCancel = () => setOpen(false)
+
+  const handleConfirm = async () => {
+    setOpen(false)
+    await userService.deleteSelf()
+    showSnackBar('Votre profil a été supprimé.', 'success')
+    logout()
+    navigate('/')
+  }
+
   return (
     <div>
       <Box
@@ -61,6 +94,15 @@ export default function UserProfile(props: UserProfileProps) {
           alignItems: 'center',
         }}
       >
+        <IconButton aria-label='upload picture' component='label' sx={{ mt: 1 }}>
+          <input hidden accept='image/*' type='file' />
+          <Avatar
+            sx={{ width: 56, height: 56 }}
+            alt={userProfile.first_name + ' ' + userProfile.last_name}
+            src={userProfile.picture && userProfile.picture}
+          />
+        </IconButton>
+
         <Box
           component='form'
           onSubmit={handleSubmit(onSubmit)}
@@ -76,7 +118,7 @@ export default function UserProfile(props: UserProfileProps) {
                 name='first_name'
                 fullWidth
                 id='firstName'
-                label='First Name'
+                label='Prénom'
                 {...register('first_name')}
                 autoFocus
               />
@@ -85,7 +127,7 @@ export default function UserProfile(props: UserProfileProps) {
               <TextField
                 fullWidth
                 id='last_name'
-                label='Last Name'
+                label='Nom'
                 name='lastName'
                 autoComplete='family-name'
                 {...register('last_name')}
@@ -95,26 +137,52 @@ export default function UserProfile(props: UserProfileProps) {
               <TextField
                 fullWidth
                 id='email'
-                label='Email Address'
+                label='Adresse mail'
                 name='email'
                 autoComplete='email'
                 required
+                disabled={
+                  userProfile.provider !== null &&
+                  userProfile.provider !== undefined &&
+                  userProfile.provider !== ''
+                }
                 error={!!errors.email}
-                helperText={errors.email && 'Please provide an email.'}
+                helperText={errors.email && 'Une adresse mail est nécessaire.'}
                 {...register('email', { required: true })}
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                name='password'
-                label='Password'
-                type='password'
-                id='password'
-                autoComplete='new-password'
-                {...register('password')}
-              />
-            </Grid>
+
+            {userProfile.provider && (
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  name='provider'
+                  label='Connecté avec'
+                  id='provider'
+                  disabled={true}
+                  variant='standard'
+                  InputProps={{
+                    startAdornment: <GoogleIcon sx={{ mr: 1 }} />,
+                  }}
+                  {...register('provider')}
+                />
+              </Grid>
+            )}
+
+            {!userProfile.provider && (
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  name='password'
+                  label='Mot de passe'
+                  type='password'
+                  id='password'
+                  autoComplete='new-password'
+                  {...register('password')}
+                />
+              </Grid>
+            )}
+
             {currentUser?.is_superuser && (
               <>
                 <Grid item xs={12}>
@@ -147,10 +215,40 @@ export default function UserProfile(props: UserProfileProps) {
             )}
           </Grid>
           <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-            Update
+            Sauvegarder
           </Button>
+          {props.allowDelete && (
+            <Button
+              fullWidth
+              variant='outlined'
+              sx={{ mb: 2 }}
+              color='error'
+              onClick={handleDeleteProfile}
+            >
+              Supprimer mon profil
+            </Button>
+          )}
         </Box>
       </Box>
+      <Dialog
+        open={open}
+        onClose={handleCancel}
+        aria-describedby='alert-profile-dialog-description'
+      >
+        <DialogContent>
+          <DialogContentText id='alert-profile-dialog-description'>
+            Êtes-vous sur de vouloir supprimer votre compte ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} autoFocus>
+            Annuler
+          </Button>
+          <Button onClick={handleConfirm} variant='contained' color='primary'>
+            Confirmer
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { styled, useTheme } from '@mui/material/styles'
 import * as d3 from 'd3'
+import * as d3Zoom from 'd3-zoom'
 import {
   Box,
   Stack,
@@ -12,6 +13,7 @@ import {
   Collapse,
   Avatar,
   IconButton,
+  IconButtonProps,
   TextField,
 } from '@mui/material'
 import FavoriteIcon from '@mui/icons-material/Favorite'
@@ -27,9 +29,13 @@ interface RouteCardProps {
   wall?: Wall
 }
 
-export function ZoomableImg({ image }) {
-  const handleZoom = (e) => {
-    d3.select('svg.u-zoomable-img image').attr('transform', e.transform)
+interface ZoomableImgProps {
+  image: string
+}
+
+export function ZoomableImg({ image }: ZoomableImgProps) {
+  const handleZoom = (e: d3Zoom.D3ZoomEvent<SVGSVGElement, unknown>) => {
+    d3.select('svg.u-zoomable-img image').attr('transform', String(e.transform))
   }
 
   const setupImage = async () => {
@@ -37,7 +43,8 @@ export function ZoomableImg({ image }) {
     img.src = image
     await img.decode()
 
-    const svg = d3.select('svg.u-zoomable-img')
+    const svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, undefined> =
+      d3.select('svg.u-zoomable-img')
     svg.selectAll('image').remove()
     svg.append('image').attr('href', image)
 
@@ -46,8 +53,8 @@ export function ZoomableImg({ image }) {
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .attr('width', '100%')
 
-    const zoom = d3
-      .zoom()
+    const zoom = d3Zoom
+      .zoom<SVGSVGElement, unknown>()
       .on('zoom', handleZoom)
       .scaleExtent([1, 5])
       .translateExtent([

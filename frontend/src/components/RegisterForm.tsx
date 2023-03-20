@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { Avatar, Button, TextField, Link, Grid, Box, Typography, Collapse } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import { useForm } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import authService from '../services/auth.service'
 import { useSnackBar } from '../contexts/snackbar'
+import { User } from '../models/user'
 import { GoogleIcon } from './LoginForm'
 import { AxiosError } from 'axios'
 
@@ -24,7 +25,7 @@ export default function RegisterForm() {
     setExpanded(!expanded)
   }
 
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<User> = async (data) => {
     try {
       await authService.register(data)
       showSnackBar('Inscription réussie.', 'success')

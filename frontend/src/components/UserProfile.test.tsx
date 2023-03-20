@@ -6,8 +6,8 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { AuthProvider } from '../contexts/auth'
 import { SnackBarProvider } from '../contexts/snackbar'
-import { User } from '../contexts/auth'
 import UserProfile from './UserProfile'
+import { User } from '../models/user'
 
 const API_URL = import.meta.env.VITE_BACKEND_API_URL
 
@@ -43,13 +43,13 @@ function setup() {
     <AuthProvider>
       <SnackBarProvider>
         <MemoryRouter initialEntries={[route]}>
-          <UserProfile userProfile={profile} onUserUpdated={handleUpdate} />
+          <UserProfile userProfile={profile} onUserUpdated={handleUpdate} allowDelete={false} />
         </MemoryRouter>
       </SnackBarProvider>
     </AuthProvider>,
   )
-  const setEmailInput = (value) => user.type(utils.getByLabelText(/Email Address/i), value)
-  const setPasswordInput = (value) => user.type(utils.getByLabelText(/Password/i), value)
+  const setEmailInput = (value: string) => user.type(utils.getByLabelText(/Email Address/i), value)
+  const setPasswordInput = (value: string) => user.type(utils.getByLabelText(/Password/i), value)
   return {
     ...utils,
     user,

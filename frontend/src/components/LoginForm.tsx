@@ -8,19 +8,21 @@ import {
   Link,
   Grid,
   SvgIcon,
+  SvgIconProps,
   Collapse,
 } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { useSnackBar } from '../contexts/snackbar'
 import { useAuth } from '../contexts/auth'
 import authService from '../services/auth.service'
+import { User } from '../models/user'
 import { AxiosError } from 'axios'
 
 const SHOW_EMAIL_REGISTER_FORM: string = import.meta.env.VITE_PWD_SIGNUP_ENABLED
 
-export function GoogleIcon(props) {
+export function GoogleIcon(props: SvgIconProps) {
   return (
     <SvgIcon {...props} viewBox='0 0 48 48'>
       <path
@@ -43,7 +45,7 @@ export function GoogleIcon(props) {
   )
 }
 
-export function FacebookIcon(props) {
+export function FacebookIcon(props: SvgIconProps) {
   return (
     <SvgIcon {...props} viewBox='0 0 48 48'>
       <linearGradient
@@ -84,7 +86,7 @@ export default function LoginForm() {
     setExpanded(!expanded)
   }
 
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<User> = async (data) => {
     try {
       const formData = new FormData()
       formData.append('username', data.email)

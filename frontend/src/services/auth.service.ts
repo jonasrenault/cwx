@@ -1,16 +1,10 @@
 import axios from 'axios'
+import { User } from '../models/user'
 
 const API_URL = import.meta.env.VITE_BACKEND_API_URL
 
-interface UserRegister {
-  first_name: string
-  last_name: string
-  email: string
-  password: string
-}
-
 class AuthService {
-  async register(user: UserRegister) {
+  async register(user: User) {
     const response = await axios.post(API_URL + 'users', user)
     return response.data
   }

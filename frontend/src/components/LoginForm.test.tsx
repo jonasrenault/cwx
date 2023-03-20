@@ -44,8 +44,9 @@ function setup() {
       </SnackBarProvider>
     </AuthProvider>,
   )
-  const setEmailInput = (value) => user.type(utils.getByLabelText(/Adresse mail/i), value)
-  const setPasswordInput = (value) => user.type(utils.getByLabelText(/Mot de passe/i), value)
+  const setEmailInput = (value: string) => user.type(utils.getByLabelText(/Adresse mail/i), value)
+  const setPasswordInput = (value: string) =>
+    user.type(utils.getByLabelText(/Mot de passe/i), value)
   return {
     ...utils,
     user,

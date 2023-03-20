@@ -113,6 +113,7 @@ it('should show users menu for admins', async () => {
   const admin: User = {
     email: 'admin@example.com',
     is_superuser: true,
+    is_active: true,
     uuid: '48f0c771-1d00-4595-b1b4-f2ee060237bc',
   }
   server.use(

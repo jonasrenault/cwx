@@ -13,7 +13,7 @@ import {
   TextField,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/auth'
 import { useSnackBar } from '../contexts/snackbar'
@@ -47,7 +47,7 @@ export default function UserProfile(props: UserProfileProps) {
     reset(userProfile)
   }, [userProfile])
 
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<User> = async (data) => {
     let updatedUser
     try {
       if (currentUser.uuid === userProfile.uuid) {

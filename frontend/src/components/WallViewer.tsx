@@ -38,7 +38,7 @@ interface WallViewerProps {
   height?: number
   wall: Wall
   selectedArea?: Area
-  onAreaSelected: (area: Area) => void
+  onAreaSelected?: (area: Area) => void
   disabled?: boolean
 }
 

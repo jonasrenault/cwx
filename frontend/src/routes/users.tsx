@@ -34,7 +34,7 @@ export async function loader() {
 }
 
 export default function Users() {
-  const { users: initialUsers } = useLoaderData()
+  const { users: initialUsers } = useLoaderData() as { users: User[] }
   const { user: currentUser } = useAuth()
   const { showSnackBar } = useSnackBar()
   const [users, setUsers] = useState<Array<User>>(initialUsers)
@@ -58,12 +58,14 @@ export default function Users() {
   const handleCancel = () => setOpen(false)
 
   const handleConfirm = async () => {
-    setOpen(false)
-    await userService.deleteUser(toDeleteUser.uuid)
-    showSnackBar('User deleted successfully.', 'success')
-    setUsers(users.filter((user) => user.uuid !== toDeleteUser.uuid))
-    if (selectedUser && selectedUser.uuid === toDeleteUser.uuid) {
-      setSelectedUser(undefined)
+    if (toDeleteUser) {
+      setOpen(false)
+      await userService.deleteUser(toDeleteUser.uuid)
+      showSnackBar('User deleted successfully.', 'success')
+      setUsers(users.filter((user) => user.uuid !== toDeleteUser.uuid))
+      if (selectedUser && selectedUser.uuid === toDeleteUser.uuid) {
+        setSelectedUser(undefined)
+      }
     }
     setToDeleteUser(undefined)
   }
@@ -126,6 +128,7 @@ export default function Users() {
               <UserProfile
                 userProfile={selectedUser}
                 onUserUpdated={handleUserUpdate}
+                allowDelete={false}
               ></UserProfile>
             </Paper>
           )}

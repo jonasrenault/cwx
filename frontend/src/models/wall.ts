@@ -36,7 +36,6 @@ export interface Route {
   grade: string
   color: string
   lane: string
-  area: Area
   setter: string
   set_on: Date
   removed_on: Date

@@ -14,7 +14,7 @@ export async function loader() {
 }
 
 export default function Home() {
-  const { walls } = useLoaderData<Array<Wall>>()
+  const { walls } = useLoaderData() as { walls: Wall[] }
   return (
     <Box>
       {/* Hero unit */}

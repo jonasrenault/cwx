@@ -1,9 +1,10 @@
 import { Container, Grid } from '@mui/material'
-import { useLoaderData, redirect, Outlet } from 'react-router-dom'
+import { useLoaderData, redirect, Outlet, LoaderFunctionArgs } from 'react-router-dom'
 import WallCard from '../components/WallCard'
 import wallService from '../services/wall.service'
+import { Wall } from '../models/wall'
 
-export async function loader({ params }) {
+export async function loader({ params }: LoaderFunctionArgs) {
   try {
     const wall = await wallService.getWall(params.wallId, true)
     return { wall }
@@ -13,7 +14,7 @@ export async function loader({ params }) {
 }
 
 export default function WallView() {
-  const { wall } = useLoaderData()
+  const { wall } = useLoaderData() as { wall: Wall }
   return (
     <Container component='main' sx={{ pt: 8, pb: 6 }}>
       <Grid container spacing={5}>

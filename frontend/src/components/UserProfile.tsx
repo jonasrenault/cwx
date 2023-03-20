@@ -22,7 +22,7 @@ import { GoogleIcon } from './LoginForm'
 
 interface UserProfileProps {
   userProfile: User
-  onUserUpdated: (user: User) => void
+  onUserUpdated?: (user: User) => void
   allowDelete: boolean
 }
 

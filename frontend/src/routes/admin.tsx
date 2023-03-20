@@ -3,6 +3,7 @@ import { Container, Paper, Typography, Button } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 import { useSnackBar } from '../contexts/snackbar'
 import adminService from '../services/admin.service'
+import { AxiosError } from 'axios'
 
 export async function loader() {
   try {
@@ -20,10 +21,11 @@ export default function Admin() {
       await adminService.loadFixtures()
       showSnackBar('Fixtures loaded', 'success')
     } catch (error) {
-      const msg =
-        error.response && typeof error.response.data.detail == 'string'
-          ? error.response.data.detail
-          : error.message
+      let msg
+      if (error instanceof AxiosError && typeof error.response.data.detail == 'string')
+        msg = error.response.data.detail
+      else if (error instanceof Error) msg = error.message
+      else msg = String(error)
       showSnackBar(msg, 'error')
     }
   }

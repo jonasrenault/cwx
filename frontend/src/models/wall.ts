@@ -1,5 +1,6 @@
 export interface Wall {
   _id: string
+  id?: string
   key: string
   name: string
   city: string
@@ -10,6 +11,7 @@ export interface Wall {
 
 export interface Area {
   _id: string
+  id?: string
   name: string
   paths: Array<Shape>
   border: [number, number][]

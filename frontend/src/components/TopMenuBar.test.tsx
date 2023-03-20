@@ -9,6 +9,7 @@ import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { AuthProvider } from '../contexts/auth'
 import { SnackBarProvider } from '../contexts/snackbar'
 import TopMenuBar from './TopMenuBar'
+import { User } from '../models/user'
 
 const API_URL = import.meta.env.VITE_BACKEND_API_URL
 const profile: User = {

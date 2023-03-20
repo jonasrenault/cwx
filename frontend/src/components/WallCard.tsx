@@ -37,7 +37,7 @@ export default function WallCard(props: WallCardProps) {
     let searchRoutes
     if (textQuery) {
       searchRoutes = fuse.search(textQuery).map((item) => item.item)
-      setRoutes()
+      setRoutes([])
     } else {
       searchRoutes = wall.routes
     }
@@ -64,7 +64,7 @@ export default function WallCard(props: WallCardProps) {
   }
 
   const handleClearArea = () => {
-    setSelectedArea()
+    setSelectedArea(null)
     debouncedSearchHandler(query, null)
   }
 
@@ -110,7 +110,7 @@ export default function WallCard(props: WallCardProps) {
                       aria-label='clear area'
                       onClick={handleClearArea}
                       edge='end'
-                      color='text.secondary'
+                      // color='text.secondary'
                       size='small'
                     >
                       <ClearIcon />

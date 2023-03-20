@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import authService from '../services/auth.service'
 import { useSnackBar } from '../contexts/snackbar'
 import { GoogleIcon } from './LoginForm'
+import { AxiosError } from 'axios'
 
 const SHOW_EMAIL_REGISTER_FORM: string = import.meta.env.VITE_PWD_SIGNUP_ENABLED
 
@@ -29,10 +30,11 @@ export default function RegisterForm() {
       showSnackBar('Inscription réussie.', 'success')
       navigate('/login')
     } catch (error) {
-      const msg =
-        error.response && typeof error.response.data.detail == 'string'
-          ? error.response.data.detail
-          : error.message
+      let msg
+      if (error instanceof AxiosError && typeof error.response.data.detail == 'string')
+        msg = error.response.data.detail
+      else if (error instanceof Error) msg = error.message
+      else msg = String(error)
       showSnackBar(msg, 'error')
     }
   }

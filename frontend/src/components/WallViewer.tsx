@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { Box } from '@mui/material'
 import { path } from 'd3-path'
 import * as d3 from 'd3'
-import { Wall, Area } from '../models/wall'
+import { Wall, Area, Shape, Rect, Path } from '../models/wall'
 import './WallViewer.css'
 
 function drawShape(el: Shape) {

@@ -6,6 +6,7 @@ import userService from '../services/user.service'
 import { useNavigate } from 'react-router-dom'
 import { useSnackBar } from '../contexts/snackbar'
 import { useAuth } from '../contexts/auth'
+import { AxiosError } from 'axios'
 
 export async function loader() {
   try {
@@ -36,10 +37,11 @@ export default function SSOLogin() {
         setUser(user)
         showSnackBar('Login successful.', 'success')
       } catch (error) {
-        const msg =
-          error.response && typeof error.response.data.detail == 'string'
-            ? error.response.data.detail
-            : error.message
+        let msg
+        if (error instanceof AxiosError && typeof error.response.data.detail == 'string')
+          msg = error.response.data.detail
+        else if (error instanceof Error) msg = error.message
+        else msg = String(error)
         showSnackBar(msg, 'error')
         setUser(undefined)
       } finally {

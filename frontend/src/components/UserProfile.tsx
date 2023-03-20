@@ -15,10 +15,12 @@ import {
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { useAuth, User } from '../contexts/auth'
+import { useAuth } from '../contexts/auth'
 import { useSnackBar } from '../contexts/snackbar'
 import userService from '../services/user.service'
 import { GoogleIcon } from './LoginForm'
+import { User } from '../models/user'
+import { AxiosError } from 'axios'
 
 interface UserProfileProps {
   userProfile: User
@@ -59,10 +61,11 @@ export default function UserProfile(props: UserProfileProps) {
         showSnackBar('Le profil utilisateur a été mis à jour.', 'success')
       }
     } catch (error) {
-      const msg =
-        error.response && typeof error.response.data.detail == 'string'
-          ? error.response.data.detail
-          : error.message
+      let msg
+      if (error instanceof AxiosError && typeof error.response.data.detail == 'string')
+        msg = error.response.data.detail
+      else if (error instanceof Error) msg = error.message
+      else msg = String(error)
       showSnackBar(msg, 'error')
     }
 

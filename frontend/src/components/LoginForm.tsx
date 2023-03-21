@@ -20,8 +20,6 @@ import authService from '../services/auth.service'
 import { User } from '../models/user'
 import { AxiosError } from 'axios'
 
-const SHOW_EMAIL_REGISTER_FORM: string = import.meta.env.VITE_PWD_SIGNUP_ENABLED
-
 export function GoogleIcon(props: SvgIconProps) {
   return (
     <SvgIcon {...props} viewBox='0 0 48 48'>
@@ -108,10 +106,6 @@ export default function LoginForm() {
     window.location.href = authService.getGoogleLoginUrl()
   }
 
-  const handleFacebookLogin = async () => {
-    window.location.href = authService.getFacebookLoginUrl()
-  }
-
   return (
     <Box
       sx={{
@@ -135,20 +129,10 @@ export default function LoginForm() {
       >
         Connexion avec Google
       </Button>
-      {/* <Button
-        variant='outlined'
-        startIcon={<FacebookIcon />}
-        sx={{ width: 1.0, mt: 2 }}
-        onClick={handleFacebookLogin}
-      >
-        Connexion avec Facebook
-      </Button> */}
 
-      {SHOW_EMAIL_REGISTER_FORM && SHOW_EMAIL_REGISTER_FORM.toLowerCase() === 'true' && (
-        <Button variant='outlined' sx={{ width: 1.0, mt: 2 }} onClick={handleExpandClick}>
-          Connexion avec adresse mail
-        </Button>
-      )}
+      <Button variant='outlined' sx={{ width: 1.0, mt: 2 }} onClick={handleExpandClick}>
+        Connexion avec adresse mail
+      </Button>
 
       <Collapse in={expanded} timeout='auto' unmountOnExit>
         <Box component='form' onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }} noValidate>

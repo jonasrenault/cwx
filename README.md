@@ -86,7 +86,7 @@ $ docker compose exec backend bash
 This will give you access to a bash session in the `backend` container. Change the name of the container to the one you want to access.
 
 
-### Docker compose settings for production
+### Docker Compose settings for production
 
 The [docker-compose-prod.yml](./docker-compose.prod.yml) file contains the configuration to run the application with docker in a production environment, on a host server. To run the application with this file, run
 
@@ -94,7 +94,7 @@ The [docker-compose-prod.yml](./docker-compose.prod.yml) file contains the confi
 docker compose -f docker-compose.prod.yml up -d
 ```
 
-**Note:** This will not work out of the box, mainly because the `docker-compose-prod.yml` configures a traefik proxy with ssl enabled that will try to fetch ssl certificates from Let's Encrypt, which will not work unless you specify a valid hostname accessible on the internet. However, to deploy the application in production on a server, you only need to set the required env variables in the [.env] file.
+**Note:** This will not work out of the box, mainly because the `docker-compose-prod.yml` configures a traefik proxy with ssl enabled that will try to fetch ssl certificates from Let's Encrypt, which will not work unless you specify a valid hostname accessible on the internet. However, to deploy the application in production on a server, you only need to set the required env variables in the [.env](./.env) file.
 
 ## Docker Compose files and env vars
 

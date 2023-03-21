@@ -14,7 +14,7 @@ on:
 
   workflow_run:
     workflows: ["Run tests"]
-    branches: [main]
+    # branches: [main]
     types:
       - completed
 

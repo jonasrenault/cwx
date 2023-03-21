@@ -15,7 +15,7 @@ If using poetry, for convenience, run `poetry config virtualenvs.in-project true
 
 You can then install the dependencies with `poetry install --with dev`.
 
-To activate the virtual env, use `poetry shell`.
+To activate the virtual env, use `poetry shell`, or use `poetry run <cmd>` to run a specific command within the virtual env.
 
 ## Running the server
 
@@ -35,6 +35,6 @@ Navigate to `http://localhost:8000/redoc` to access the API's alternative doc bu
 
 The project uses Pydantic's settings management through FastAPI. Documentation on how the settings work is availabe [here](https://fastapi.tiangolo.com/advanced/settings/).
 
-The configuration file is located in [config/config.py](app/config/config.py). This file defines the setting properties, there types, and default values. The `Config` class specifies where these properties are from, i.e. the [.env.dev](.env.dev) file. Modify the values in the [.env.dev](.env.dev) file to change the configuration.
+The configuration file is located in [config/config.py](app/config/config.py). This file defines the setting properties, their types, and default values. The `Config` class specifies where these properties are from, i.e. the [.env.dev](.env.dev) file. Modify the values in the [.env.dev](.env.dev) file to change the configuration.
 
 Note that when the backend application is run with Docker, the values in the [.env.dev](.env.dev) are overriden with environment variables set in the Docker configuration.

@@ -74,14 +74,6 @@ export default function RegisterForm() {
         >
           Connexion avec Google
         </Button>
-        {/* <Button
-          variant='outlined'
-          startIcon={<FacebookIcon />}
-          sx={{ width: 1.0, mt: 2 }}
-          onClick={handleGoogleLogin}
-        >
-          Connexion avec Facebook
-        </Button> */}
 
         {SHOW_EMAIL_REGISTER_FORM && SHOW_EMAIL_REGISTER_FORM.toLowerCase() === 'true' && (
           <Button variant='outlined' sx={{ width: 1.0, mt: 2 }} onClick={handleExpandClick}>

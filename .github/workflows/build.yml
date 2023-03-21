@@ -37,10 +37,13 @@ jobs:
         run: |
           touch .env
           echo "${{ secrets.SERVER_ENV_PROD }}" > .env
-          cat .env
 
       - name: Build images
         run: docker compose -f docker-compose.prod.yml build
 
       - name: Push image to container registry
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
         run: docker compose -f docker-compose.prod.yml push

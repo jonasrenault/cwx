@@ -26,7 +26,7 @@ jobs:
   build-push-to-registry:
     name: Docker compose build and push to ghcr
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
     environment:
       name: prod
       url: https://cwx.jrenault.fr

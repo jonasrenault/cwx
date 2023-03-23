@@ -75,9 +75,9 @@ export default function WallViewer(props: WallViewerProps) {
             className={
               'u-area' +
               (props.disabled ? ' disabled' : '') +
-              (props.selectedArea?._id === area._id ? ' selected' : '')
+              (props.selectedArea?.id === area.id ? ' selected' : '')
             }
-            key={area._id}
+            key={area.id}
             onMouseOver={() => (props.disabled ? null : handleMouseEnter(area))}
             onMouseLeave={() => (props.disabled ? null : handleMouseLeave())}
             onClick={() => (props.disabled ? null : props.onAreaSelected(area))}

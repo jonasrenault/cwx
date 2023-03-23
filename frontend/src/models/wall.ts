@@ -1,5 +1,7 @@
+import { User } from './user'
+
 export interface Wall {
-  _id: string
+  id: string
   id?: string
   key: string
   name: string
@@ -10,7 +12,7 @@ export interface Wall {
 }
 
 export interface Area {
-  _id: string
+  id: string
   id?: string
   name: string
   paths: Array<Shape>
@@ -34,7 +36,7 @@ export interface Path extends Shape {
 }
 
 export interface Route {
-  _id: string
+  id: string
   grade: string
   color: string
   lane: string
@@ -44,4 +46,24 @@ export interface Route {
   img_path?: string
   area: Area
   wall: Wall
+  tops?: Array<Top>
+  votes?: Array<Vote>
+}
+
+export enum TopType {
+  Lead = 'LEAD',
+  TopRope = 'TOPROPE',
+  Project = 'PROJECT',
+}
+
+export interface Top {
+  user: User
+  route: Route
+  type: TopType
+}
+
+export interface Vote {
+  user: User
+  route: Route
+  grade: str
 }

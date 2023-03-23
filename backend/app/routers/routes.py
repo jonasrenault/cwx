@@ -1,15 +1,16 @@
 from typing import List, Optional
-from fastapi import APIRouter, Depends, Body
+from fastapi import APIRouter, Depends, Body, HTTPException
 from beanie import PydanticObjectId
 from datetime import datetime
 
-from ..models import User, Route, Top, TopType
+from ..models import User, Route, Top, TopType, Vote
+from .. import schemas
 from ..auth.auth import get_current_active_user
 
 router = APIRouter()
 
 
-@router.get("", response_model=List[Route])
+@router.get("", response_model=List[schemas.Route])
 async def get_routes(
     limit: Optional[int] = 100,
     offset: Optional[int] = 0,
@@ -26,43 +27,73 @@ async def top_route(
     id: PydanticObjectId,
     type: TopType = Body(..., embed=True),
     current_user: User = Depends(get_current_active_user),
-) -> Route:
+) -> schemas.Top:
+    """
+    Toggle top status for a route and current_user
+    """
     route = await Route.get(id)
+    if route is None:
+        raise HTTPException(status_code=404, detail="Route does not exist.")
 
-    top = (
-        [t for t in current_user.tops if t.route.id == id and t.type == type]
-        if current_user.tops
-        else None
+    top = await Top.find_one(
+        Top.user.id == current_user.id, Top.route.id == id, Top.type == type
     )
     if top:
-        # remove existing top
-        current_user.tops[:] = [
-            t for t in current_user.tops if t.route.id != id or t.type != type
-        ]
-        if not current_user.tops:
-            current_user.tops = None
+        await top.delete()
+        top.route = route
+        top.user = current_user
     else:
-        # create new top
-        tops = [] if not current_user.tops else current_user.tops
-        tops.append(Top(route=route, type=type, created_on=datetime.now()))
-        current_user.tops = tops
+        top = Top(user=current_user, route=route, type=type, created_on=datetime.now())
+        top = await top.save()
 
-    await current_user.save()
-
-    # TODO: dispatch event
-    return route
+    return schemas.Top(**top.dict(exclude_unset=True))
 
 
-@router.get("/{id}/tops")
-async def get_route_toppers(
+@router.post("/{id}/vote", response_model=schemas.Vote)
+async def vote_route(
+    id: PydanticObjectId,
+    grade: str = Body(..., embed=True),
+    current_user: User = Depends(get_current_active_user),
+):
+    route = await Route.get(id)
+    if route is None:
+        raise HTTPException(status_code=404, detail="Route does not exist.")
+
+    vote = await Vote.find_one(Vote.user.id == current_user.id, Vote.route.id == id)
+    if vote:
+        # update vote grade
+        vote.grade = grade
+        vote.updated_on = datetime.now()
+    else:
+        # create new vote
+        vote = Vote(
+            user=current_user, route=route, grade=grade, created_on=datetime.now()
+        )
+
+    await vote.save()
+    return vote
+
+
+@router.get("/{id}")
+async def fetch_route(
     id: PydanticObjectId,
     type: TopType = None,
-    current_user: User = Depends(get_current_active_user),
-) -> List[User]:
+) -> schemas.RouteWithVotes:
+    """
+    Get route and fetch related info such as tops and votes.
+    """
+    route = await Route.get(id)
+    if route is None:
+        raise HTTPException(status_code=404, detail="Route does not exist.")
+
+    tops = Top.find(Top.route.id == id, fetch_links=True)
     if type is not None:
-        users = await User.find(
-            {"tops": {"$elemMatch": {"route._id": id, "type": type}}}
-        ).to_list()
-    else:
-        users = await User.find({"tops.route._id": id}).to_list()
-    return users
+        tops = tops.find(Top.type == type)
+    tops = await tops.to_list()
+
+    votes = await Vote.find(Vote.route.id == id, fetch_links=True).to_list()
+
+    response = schemas.RouteWithVotes(
+        tops=tops, votes=votes, **route.dict(exclude_unset=True)
+    )
+    return response

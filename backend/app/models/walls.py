@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from datetime import datetime
 from typing import List, Optional, Tuple, Union
 
@@ -24,43 +22,21 @@ class Path(Shape):
     points: List[Tuple[int, int]]
 
 
-class AreaBase(Document):
-    """
-    Base model for Area, with `id` and `name` fields required
-    """
-
+class Area(Document):
     name: str
-
-
-class Area(AreaBase):
-    """
-    Area model in DB with all fields.
-    """
-
     paths: List[Union[Rect, Path]]
     border: List[Tuple[int, int]]
 
 
-class WallBase(Document):
-    """
-    Base model for Wall, with `id`, `key` and `name` required fields.
-    """
-
+class Wall(Document):
     key: Indexed(str, unique=True)
     name: str
-
-
-class Wall(WallBase):
     city: Optional[str] = None
     description: Optional[str] = None
     areas: Optional[List[Link[Area]]]
 
 
-class RouteBase(Document):
-    """
-    Base Route model.
-    """
-
+class Route(Document):
     lane: str
     grade: str
     color: str
@@ -68,6 +44,8 @@ class RouteBase(Document):
     set_on: datetime
     removed_on: Optional[datetime]
     img_path: Optional[str]
+    area: Optional[Link[Area]]
+    wall: Optional[Link[Wall]]
 
     class Settings:
         indexes = [
@@ -76,8 +54,3 @@ class RouteBase(Document):
                 name="route_text_index",
             ),
         ]
-
-
-class Route(RouteBase):
-    area: Optional[Link[Area]]
-    wall: Optional[Link[Wall]]

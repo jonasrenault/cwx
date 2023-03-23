@@ -7,7 +7,7 @@ import Login from './routes/login'
 import Register from './routes/register'
 import Users, { loader as usersLoader } from './routes/users'
 import WallView, { loader as wallLoader } from './routes/wall'
-import RouteView from './routes/route'
+import RouteView, { loader as routeLoader } from './routes/route'
 import Admin, { loader as adminLoader } from './routes/admin'
 import SSOLogin, { loader as ssoLoader } from './routes/sso.login'
 
@@ -49,6 +49,7 @@ export const routes = [
           {
             path: ':routeId',
             element: <RouteView />,
+            loader: routeLoader,
           },
         ],
       },

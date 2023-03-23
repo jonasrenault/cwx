@@ -26,6 +26,8 @@ import {
   Typography,
 } from '@mui/material'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import VerifiedIcon from '@mui/icons-material/Verified'
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined'
@@ -33,9 +35,9 @@ import BookmarkAddedOutlinedIcon from '@mui/icons-material/BookmarkAddedOutlined
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import WallViewer from './WallViewer'
-import { Route, Wall } from '../models/wall'
-import routeService, { RouteToppers } from '../services/route.service'
-import { TopType } from '../models/user'
+import { useSnackBar } from '../contexts/snackbar'
+import { Route, Wall, Top, TopType, Vote } from '../models/wall'
+import routeService from '../services/route.service'
 import { useAuth } from '../contexts/auth'
 
 const API_URL = import.meta.env.VITE_BACKEND_API_URL
@@ -102,54 +104,108 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }))
 
+interface RouteCardHeaderAvatarProps {
+  route: Route
+}
+
+function RouteCardHeaderAvatar({ route }: RouteCardHeaderAvatarProps) {
+  const handleVote = async (up: boolean) => {
+    await routeService.voteRoute(route.id, route.grade, up)
+  }
+
+  return (
+    <Badge
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      badgeContent={
+        <IconButton
+          aria-label='up vote route'
+          size='small'
+          sx={{ color: 'red' }}
+          onClick={() => handleVote(true)}
+        >
+          <AddCircleOutlineIcon fontSize='inherit' />
+        </IconButton>
+      }
+    >
+      <Badge
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        badgeContent={
+          <IconButton
+            aria-label='up vote route'
+            size='small'
+            sx={{ color: 'green' }}
+            onClick={() => handleVote(false)}
+          >
+            <RemoveCircleOutlineIcon fontSize='inherit' />
+          </IconButton>
+        }
+      >
+        <Avatar
+          sx={{
+            bgcolor: route.color === 'yellow' ? '#ffeb3b' : route.color,
+            color: ['white', 'yellow'].indexOf(route.color) >= 0 ? '#000' : 'palette.primary',
+            border: route.color === 'white' ? '2px solid' : 'none',
+            fontSize: route.grade.length > 3 ? '.8rem' : '1.25rem',
+          }}
+          aria-label='recipe'
+        >
+          {route.grade.split('').map((c) => (c === '+' ? <sup key={c}>+</sup> : c))}
+        </Avatar>
+      </Badge>
+    </Badge>
+  )
+}
+
 export default function RouteCard(props: RouteCardProps) {
   const { route, wall } = props
   const { user: currentUser } = useAuth()
   const [expanded, setExpanded] = useState(false)
-  const [toppers, setToppers] = useState<RouteToppers>(null)
   const theme = useTheme()
+  const [tops, setTops] = useState([])
+  const { showSnackBar } = useSnackBar()
 
-  const selectedArea = wall?.areas?.filter((area) => area._id === route.area.id)[0]
+  const selectedArea = wall?.areas?.filter((area) => area.id === route.area.id)[0]
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
   }
 
-  const fetchRouteToppers = async (type: TopType) => {
-    const _toppers = await routeService.getRouteToppers(route._id, type)
-    if (type && toppers) {
-      toppers.setToppers(type, _toppers)
-      setToppers(toppers.copy())
-    } else {
-      setToppers(new RouteToppers(route._id, _toppers))
-    }
-  }
-
   useEffect(() => {
-    fetchRouteToppers()
+    setTops(route && route.tops ? route.tops : [])
   }, [route])
 
   const handleTop = async (type: TopType) => {
-    await routeService.topRoute(route._id, type)
-    fetchRouteToppers(type)
+    if (!currentUser) {
+      showSnackBar(
+        "Vous devez d'abord vous connecter pour pouvoir sauvegarder une voie.",
+        'warning',
+      )
+      return
+    }
+    const top = await routeService.topRoute(route.id, type)
+    const newTops = tops.filter((t) => t.id !== top.id)
+    if (tops.length === newTops.length) {
+      newTops.push(top)
+    }
+    setTops(newTops)
+  }
+
+  const countTops = (type: TopType) => {
+    return tops ? tops.filter((t) => t.type === type).length : 0
+  }
+
+  const hasTopped = (type: TopType) => {
+    return (
+      currentUser &&
+      tops &&
+      tops.filter((t) => t.type === type && t.user.uuid === currentUser.uuid).length > 0
+    )
   }
 
   return (
     <Card sx={{ width: '100%' }} variant='outlined'>
       <CardHeader
-        avatar={
-          <Avatar
-            sx={{
-              bgcolor: route.color === 'yellow' ? '#ffeb3b' : route.color,
-              color: ['white', 'yellow'].indexOf(route.color) >= 0 ? '#000' : 'palette.primary',
-              border: route.color === 'white' ? '2px solid' : 'none',
-              fontSize: route.grade.length > 3 ? '.8rem' : '1.25rem',
-            }}
-            aria-label='recipe'
-          >
-            {route.grade.split('').map((c) => (c === '+' ? <sup key={c}>+</sup> : c))}
-          </Avatar>
-        }
+        avatar={<RouteCardHeaderAvatar route={route} />}
         title={route.setter}
         subheader={`Couloir ${route.lane}`}
       />
@@ -157,34 +213,22 @@ export default function RouteCard(props: RouteCardProps) {
       <CardActions disableSpacing>
         <Tooltip title='Validée en tête'>
           <IconButton aria-label='top route' onClick={() => handleTop(TopType.Lead)}>
-            <Badge badgeContent={toppers ? toppers.count(TopType.Lead) : 0} color='secondary'>
-              {toppers && toppers.hasTopped(TopType.Lead, currentUser) ? (
-                <VerifiedIcon />
-              ) : (
-                <VerifiedOutlinedIcon />
-              )}
+            <Badge badgeContent={countTops(TopType.Lead)} color='secondary'>
+              {hasTopped(TopType.Lead) ? <VerifiedIcon /> : <VerifiedOutlinedIcon />}
             </Badge>
           </IconButton>
         </Tooltip>
         <Tooltip title='Validée en moulinette'>
           <IconButton aria-label='top roped route' onClick={() => handleTop(TopType.TopRope)}>
-            <Badge badgeContent={toppers ? toppers.count(TopType.TopRope) : 0} color='secondary'>
-              {toppers && toppers.hasTopped(TopType.TopRope, currentUser) ? (
-                <BookmarkAddedIcon />
-              ) : (
-                <BookmarkAddedOutlinedIcon />
-              )}
+            <Badge badgeContent={countTops(TopType.TopRope)} color='secondary'>
+              {hasTopped(TopType.TopRope) ? <BookmarkAddedIcon /> : <BookmarkAddedOutlinedIcon />}
             </Badge>
           </IconButton>
         </Tooltip>
         <Tooltip title='Projet'>
           <IconButton aria-label='project route' onClick={() => handleTop(TopType.Project)}>
-            <Badge badgeContent={toppers ? toppers.count(TopType.Project) : 0} color='secondary'>
-              {toppers && toppers.hasTopped(TopType.Project, currentUser) ? (
-                <FavoriteIcon />
-              ) : (
-                <FavoriteBorderIcon />
-              )}
+            <Badge badgeContent={countTops(TopType.Project)} color='secondary'>
+              {hasTopped(TopType.Project) ? <FavoriteIcon /> : <FavoriteBorderIcon />}
             </Badge>
           </IconButton>
         </Tooltip>
@@ -239,33 +283,29 @@ export default function RouteCard(props: RouteCardProps) {
             {route.img_path && <ZoomableImg image={`${API_URL}static/${route.img_path}`} />}
           </Box>
         </Collapse>
-        {toppers && toppers.getToppers(TopType.Lead) && (
+        {tops && tops.filter((t) => t.type === TopType.Lead).length > 0 && (
           <Stack spacing={0} divider={<Divider flexItem />} sx={{ mt: 4 }}>
             <Typography variant='body1'>Validée par</Typography>
             <List
               sx={{ maxHeight: 450, overflow: 'auto', '::-webkit-scrollbar': { display: 'none' } }}
             >
-              {toppers.getToppers(TopType.Lead).map((user) => {
-                return (
-                  <ListItem key={user.uuid} disablePadding>
-                    <ListItemButton data-testid={user.uuid}>
-                      <ListItemAvatar>
-                        <Avatar
-                          alt={user.first_name + ' ' + user.last_name}
-                          src={user.picture && user.picture}
-                        />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={user.email}
-                        secondary={
-                          (user.first_name || user.last_name) &&
-                          user.first_name + ' ' + user.last_name
-                        }
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                )
-              })}
+              {tops
+                .filter((t) => t.type === TopType.Lead)
+                .map((top) => {
+                  return (
+                    <ListItem key={top.user.uuid} disablePadding>
+                      <ListItemButton data-testid={top.user.uuid}>
+                        <ListItemAvatar>
+                          <Avatar
+                            alt={top.user.first_name + ' ' + top.user.last_name}
+                            src={top.user.picture && top.user.picture}
+                          />
+                        </ListItemAvatar>
+                        <ListItemText primary={top.user.first_name + ' ' + top.user.last_name} />
+                      </ListItemButton>
+                    </ListItem>
+                  )
+                })}
             </List>
           </Stack>
         )}

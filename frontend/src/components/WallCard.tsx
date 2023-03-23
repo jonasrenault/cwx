@@ -43,7 +43,7 @@ export default function WallCard(props: WallCardProps) {
     }
 
     if (area) {
-      searchRoutes = searchRoutes.filter((route) => route.area.id === area._id)
+      searchRoutes = searchRoutes.filter((route) => route.area.id === area.id)
     }
     setRoutes(searchRoutes)
   }
@@ -77,7 +77,7 @@ export default function WallCard(props: WallCardProps) {
   }, [debouncedSearchHandler])
 
   const onRouteClick = useCallback((route: Route) => {
-    navigate(`/wall/${wall._id}/${route._id}`)
+    navigate(`/wall/${wall.id}/${route.id}`)
   }, [])
 
   return (

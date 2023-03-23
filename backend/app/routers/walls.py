@@ -49,7 +49,7 @@ async def get_wall(
     return response
 
 
-@router.get("/{id}/routes", response_model=List[models.Route])
+@router.get("/{id}/routes", response_model=List[schemas.Route])
 async def get_wall_routes(
     id: PydanticObjectId,
 ):

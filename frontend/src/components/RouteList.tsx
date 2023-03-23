@@ -25,10 +25,10 @@ export default function RouteList(props: RouteListProprs) {
     <List dense={true} sx={{ overflow: 'auto', maxHeight: 300 }}>
       {routes.map((route) => (
         <ListItemButton
-          key={route._id}
+          key={route.id}
           onClick={() => handleRouteClick(route)}
-          selected={route._id === activeRouteId}
-          autoFocus={route._id === activeRouteId}
+          selected={route.id === activeRouteId}
+          autoFocus={route.id === activeRouteId}
         >
           <ListItem
             secondaryAction={

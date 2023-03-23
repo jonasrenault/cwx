@@ -90,7 +90,6 @@ async def update_profile(
 
 @router.delete("/me", response_model=schemas.User)
 async def delete_me(user: models.User = Depends(get_current_active_user)):
-    print("In route")
     await user.delete()
     return user
 

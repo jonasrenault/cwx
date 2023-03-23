@@ -1,10 +1,9 @@
 from typing import List, Optional
 
+from beanie import PydanticObjectId
 from fastapi import APIRouter
-from beanie import WriteRules, PydanticObjectId
 
-from .. import schemas, models
-from ..fixtures import fixtures
+from .. import models, schemas
 
 router = APIRouter()
 

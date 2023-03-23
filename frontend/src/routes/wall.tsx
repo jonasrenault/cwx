@@ -18,10 +18,10 @@ export default function WallView() {
   return (
     <Container component='main' sx={{ pt: 8, pb: 6 }}>
       <Grid container spacing={5}>
-        <Grid item sm={12} md={6}>
+        <Grid item xs={12} md={6}>
           <WallCard wall={wall} />
         </Grid>
-        <Grid item sm={12} md={6}>
+        <Grid item xs={12} md={6}>
           <Outlet />
         </Grid>
       </Grid>

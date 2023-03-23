@@ -1,7 +1,22 @@
-from typing import Optional
-from pydantic import EmailStr, Field
+from typing import Optional, List
+from enum import Enum
+from pydantic import BaseModel, EmailStr, Field
+from datetime import datetime
 from beanie import Document, Indexed
 from uuid import UUID, uuid4
+from .walls import Route
+
+
+class TopType(str, Enum):
+    TOPROPE = "TOPROPE"
+    LEAD = "LEAD"
+    PROJECT = "PROJECT"
+
+
+class Top(BaseModel):
+    route: Route
+    created_on: datetime
+    type: TopType
 
 
 class User(Document):
@@ -14,3 +29,4 @@ class User(Document):
     picture: Optional[str] = None
     is_active: bool = True
     is_superuser: bool = False
+    tops: Optional[List[Top]]

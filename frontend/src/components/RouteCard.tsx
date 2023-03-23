@@ -4,6 +4,7 @@ import * as d3 from 'd3'
 import * as d3Zoom from 'd3-zoom'
 import {
   Box,
+  Badge,
   Stack,
   Card,
   Grid,
@@ -11,16 +12,31 @@ import {
   CardContent,
   CardActions,
   Collapse,
+  Divider,
   Avatar,
   IconButton,
   IconButtonProps,
   TextField,
+  Tooltip,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
 } from '@mui/material'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import FavoriteIcon from '@mui/icons-material/Favorite'
-import ShareIcon from '@mui/icons-material/Share'
+import VerifiedIcon from '@mui/icons-material/Verified'
+import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined'
+import BookmarkAddedOutlinedIcon from '@mui/icons-material/BookmarkAddedOutlined'
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import WallViewer from './WallViewer'
 import { Route, Wall } from '../models/wall'
+import routeService, { RouteToppers } from '../services/route.service'
+import { TopType } from '../models/user'
+import { useAuth } from '../contexts/auth'
 
 const API_URL = import.meta.env.VITE_BACKEND_API_URL
 
@@ -88,13 +104,34 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 export default function RouteCard(props: RouteCardProps) {
   const { route, wall } = props
+  const { user: currentUser } = useAuth()
   const [expanded, setExpanded] = useState(false)
+  const [toppers, setToppers] = useState<RouteToppers>(null)
   const theme = useTheme()
 
   const selectedArea = wall?.areas?.filter((area) => area._id === route.area.id)[0]
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
+  }
+
+  const fetchRouteToppers = async (type: TopType) => {
+    const _toppers = await routeService.getRouteToppers(route._id, type)
+    if (type && toppers) {
+      toppers.setToppers(type, _toppers)
+      setToppers(toppers.copy())
+    } else {
+      setToppers(new RouteToppers(route._id, _toppers))
+    }
+  }
+
+  useEffect(() => {
+    fetchRouteToppers()
+  }, [route])
+
+  const handleTop = async (type: TopType) => {
+    await routeService.topRoute(route._id, type)
+    fetchRouteToppers(type)
   }
 
   return (
@@ -118,12 +155,39 @@ export default function RouteCard(props: RouteCardProps) {
       />
 
       <CardActions disableSpacing>
-        <IconButton aria-label='add to favorites'>
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label='share'>
-          <ShareIcon />
-        </IconButton>
+        <Tooltip title='Validée en tête'>
+          <IconButton aria-label='top route' onClick={() => handleTop(TopType.Lead)}>
+            <Badge badgeContent={toppers ? toppers.count(TopType.Lead) : 0} color='secondary'>
+              {toppers && toppers.hasTopped(TopType.Lead, currentUser) ? (
+                <VerifiedIcon />
+              ) : (
+                <VerifiedOutlinedIcon />
+              )}
+            </Badge>
+          </IconButton>
+        </Tooltip>
+        <Tooltip title='Validée en moulinette'>
+          <IconButton aria-label='top roped route' onClick={() => handleTop(TopType.TopRope)}>
+            <Badge badgeContent={toppers ? toppers.count(TopType.TopRope) : 0} color='secondary'>
+              {toppers && toppers.hasTopped(TopType.TopRope, currentUser) ? (
+                <BookmarkAddedIcon />
+              ) : (
+                <BookmarkAddedOutlinedIcon />
+              )}
+            </Badge>
+          </IconButton>
+        </Tooltip>
+        <Tooltip title='Projet'>
+          <IconButton aria-label='project route' onClick={() => handleTop(TopType.Project)}>
+            <Badge badgeContent={toppers ? toppers.count(TopType.Project) : 0} color='secondary'>
+              {toppers && toppers.hasTopped(TopType.Project, currentUser) ? (
+                <FavoriteIcon />
+              ) : (
+                <FavoriteBorderIcon />
+              )}
+            </Badge>
+          </IconButton>
+        </Tooltip>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
@@ -175,6 +239,36 @@ export default function RouteCard(props: RouteCardProps) {
             {route.img_path && <ZoomableImg image={`${API_URL}static/${route.img_path}`} />}
           </Box>
         </Collapse>
+        {toppers && toppers.getToppers(TopType.Lead) && (
+          <Stack spacing={0} divider={<Divider flexItem />} sx={{ mt: 4 }}>
+            <Typography variant='body1'>Validée par</Typography>
+            <List
+              sx={{ maxHeight: 450, overflow: 'auto', '::-webkit-scrollbar': { display: 'none' } }}
+            >
+              {toppers.getToppers(TopType.Lead).map((user) => {
+                return (
+                  <ListItem key={user.uuid} disablePadding>
+                    <ListItemButton data-testid={user.uuid}>
+                      <ListItemAvatar>
+                        <Avatar
+                          alt={user.first_name + ' ' + user.last_name}
+                          src={user.picture && user.picture}
+                        />
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={user.email}
+                        secondary={
+                          (user.first_name || user.last_name) &&
+                          user.first_name + ' ' + user.last_name
+                        }
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                )
+              })}
+            </List>
+          </Stack>
+        )}
       </CardContent>
     </Card>
   )
